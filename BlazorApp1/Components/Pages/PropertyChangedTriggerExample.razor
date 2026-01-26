@@ -68,10 +68,16 @@
 <button @onclick="this.SearchDammy">検索（ダミー）</button>
 <br />
 
-<ExAppleComponent Title="GUI確定値"
+<ExAppleComponent Title="表示値"
 				   Apple="@this.DisplayedApple"
 				   Banana="@this.DisplayedBanana"
 				   Cherry="@this.DisplayedCherry" />
+<br />
+
+<ExBananaComponent Title="表示値別例"
+				  Apple="@this.DisplayedApple"
+				  Banana="@this.DisplayedBanana"
+				  Cherry="@this.DisplayedCherry" />
 
 @code
 {

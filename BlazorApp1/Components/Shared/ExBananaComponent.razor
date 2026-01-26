@@ -1,6 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Http
 <h3>@this.Title</h3>
 
+<button @onclick="this.SearchDammy">検索（ダミー）</button>
+<br />
+
 <table>
     <th>
         <td>名前</td>
@@ -8,15 +11,18 @@
     </th>
     <tr>
         <td>アップル</td>
-        <td>@this.Apple</td>
+		<td><InputText @bind-Value="this.GuiApple" placeholder="（＾～＾）" /></td>
+        <td>@this.DisplayedApple</td>
     </tr>
     <tr>
         <td>バナナ</td>
-        <td>@this.Banana</td>
+		<td><InputText @bind-Value="this.GuiBanana" placeholder="（＾～＾）" /></td>
+		<td>@this.DisplayedBanana</td>
     </tr>
     <tr>
         <td>チェリー</td>
-        <td>@this.Cherry</td>
+		<td><InputText @bind-Value="this.GuiCherry" placeholder="（＾～＾）" /></td>
+		<td>@this.DisplayedCherry</td>
     </tr>
 </table>
 
@@ -306,5 +312,23 @@
 			await this.InvokeAsync(this.StateHasChanged);   // `OnAfterRenderAsync()` 内で何か更新したら、もう１回レンダーが必須。
 			return;
 		}
+	}
+
+
+	// ========================================
+	// イベントハンドラ
+	// ========================================
+
+
+	/// <summary>
+	/// ［検索］ダミーボタン
+	/// </summary>
+	private void SearchDammy()
+	{
+		System.Console.WriteLine("[{DateTime.Now}][ＥxBananaComponent.razor > ＳearchDammy]　🔥　検索ダミーボタン");
+
+		this.DisplayedApple = this.GuiApple;
+		this.DisplayedBanana = this.GuiBanana;
+		this.DisplayedCherry = this.GuiCherry;
 	}
 }

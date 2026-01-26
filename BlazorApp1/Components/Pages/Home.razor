@@ -50,7 +50,9 @@ Welcome to your new app.
 
 <button @onclick="NavigateToSamePage">自分のページへ飛ぶ</button><br/>
 
-<p>@this.Message</p>
+<p>初期化回数： @this.InitializationCount</p>
+<p>ページ遷移回数： @this.NavigationCount</p>
+<p>メッセージ： @this.Message</p>
 
 @code
 {
@@ -139,11 +141,30 @@ Welcome to your new app.
 
 
 	// ========================================
-	// プロフィール
+	// プロパティ
 	// ========================================
 
 
+	/// <summary>
+	/// 何かメッセージ
+	/// </summary>
 	private string Message { get; set; } = string.Empty;
+
+	/// <summary>
+	///		<pre>
+	/// 初期化回数
+	/// 
+	///		- 0 から 1 になるだけのはず。2 になるはずがない。
+	///		</pre>
+	/// </summary>
+	private int InitializationCount = 0;
+
+	/// <summary>
+	///		<pre>
+	///	ページ遷移回数
+	///		</pre>
+	/// </summary>
+	private int NavigationCount = 0;
 
 
 	// ========================================
@@ -154,6 +175,8 @@ Welcome to your new app.
 	/// <summary>
 	///		<pre>
 	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
+	///	
+	///		- このメソッドが呼び出されるとき、このページのインスタンスのプロパティは初期値に戻っている。レンダーすると、前の値が残っている。仕組みがさっぱり分からない。
 	///		</pre>
 	/// </summary>
 	/// <returns></returns>
@@ -161,6 +184,10 @@ Welcome to your new app.
 	{
 		await base.OnInitializedAsync();
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　🔥　ページ・インスタンス生成");
+
+		var oldInitializationCount = this.InitializationCount;
+		this.InitializationCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　ページ初期化回数： （{oldInitializationCount}→{this.InitializationCount}）　ちなみにページ遷移回数： {this.NavigationCount}");
 	}
 
 
@@ -176,7 +203,7 @@ Welcome to your new app.
 	{
 		await base.OnParametersSetAsync();
 
-		System.Console.WriteLine("[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　初期化");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
 		if (string.IsNullOrWhiteSpace(this.UrlApple) || !bool.TryParse(this.UrlApple, out var urlApple))
 		{
@@ -243,7 +270,11 @@ Welcome to your new app.
 	private void NavigateToSamePage()
 	{
 		System.Console.WriteLine("[{DateTime.Now}][Home.razor > ＮavigateToSamePage]　🔥　このページにまた飛ぶ");
+
+		// 画面遷移しても、不思議なことにこのメッセージは残る。
 		this.Message = "同じページへ飛んだ。";
+
 		this.NavigationMgr.NavigateTo("https://localhost:7249/");
+		this.NavigationCount++;
 	}
 }

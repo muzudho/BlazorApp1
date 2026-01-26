@@ -70,6 +70,7 @@
 <p>初期化回数： @this.InitializationCount</p>
 <p>ページ遷移回数： @this.LeaveCount</p>
 <p>レンダー回数： @this.RenderingCount</p>
+<p>重い処理の回数： @this.HeavylyProcessCount</p>
 <p>メッセージ： @this.Message</p>
 
 <ExBananaComponent Title="GUI一時値"
@@ -114,6 +115,7 @@
 	private string? _lastUrlApple;
 	private string GuiApple { get; set; } = "Ringo";
 	private string DisplayedApple { get; set; } = "Ringo";
+	private string _lastDisplayedApple = "Ringo";
 
 
 	// バナナ
@@ -133,6 +135,7 @@
 	private string? _lastUrlBanana;
 	private string GuiBanana { get; set; } = "Basho";
 	private string DisplayedBanana { get; set; } = "Basho";
+	private string _lastDisplayedBanana = "Basho";
 
 
 	// チェリー
@@ -150,6 +153,7 @@
 	private string? _lastUrlCherry;
 	private string? GuiCherry { get; set; }
 	private string? DisplayedCherry { get; set; }
+	private string? _lastDisplayedCherry;
 
 
 	// ========================================
@@ -186,6 +190,13 @@
 	///		</pre>
 	/// </summary>
 	private int RenderingCount = 0;
+
+	/// <summary>
+	///		<pre>
+	///	重い処理の回数
+	///		</pre>
+	/// </summary>
+	private int HeavylyProcessCount = 0;
 
 
 	// ========================================
@@ -234,24 +245,10 @@
 	{
 		await base.OnParametersSetAsync();
 
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　◆１１◆　パラメーターズセット");
 
-
-		// アップル
-
-
-
-
-		// バナナ
-
-
-
-
-
-		// チェリー
-
-
-
+		// ここで何か処理をすると、ログに［サーバーサイド・レンダリング］と［クライアントサイド・レンダリング］の２つが被って出力されるので、ログが見にくくなります。
+		// ［パラメーターがセットされた］というログだけ出力するのに向いています。
 	}
 
 
@@ -260,7 +257,7 @@
 		await base.OnAfterRenderAsync(firstRender);
 
 		this.RenderingCount++;
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　描画後　firstRender = {firstRender}, RenderingCount = {this.RenderingCount}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　◆２２◆　描画後　firstRender = {firstRender}, RenderingCount = {this.RenderingCount}");
 
 		var isDirty = false;
 
@@ -285,9 +282,25 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
 			this._lastUrlApple = this.UrlApple;
-			// ［クエリーパラメーター］の変更は［GUI］へ反映
-			this.GuiApple = this.UrlApple;
+			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedApple = this.GuiApple = this.UrlApple;
 			isDirty = true;
+		}
+
+		if (this._lastDisplayedApple != this.DisplayedApple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>アップル］が変更されました。　（{this._lastDisplayedApple}→{this.DisplayedApple}）");
+			this._lastDisplayedApple = this.DisplayedApple;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
 		}
 
 
@@ -303,8 +316,25 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
 			this._lastUrlBanana = this.UrlBanana;
-			this.GuiBanana = this.UrlBanana;
+			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedBanana = this.GuiBanana = this.UrlBanana;
 			isDirty = true;
+		}
+
+		if (this._lastDisplayedBanana != this.DisplayedBanana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>バナナ］が変更されました。　（{this._lastDisplayedBanana}→{this.DisplayedBanana}）");
+			this._lastDisplayedBanana = this.DisplayedBanana;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
 		}
 
 
@@ -320,9 +350,29 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
 			this._lastUrlCherry = this.UrlCherry;
-			this.GuiCherry = this.UrlCherry;
+			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedCherry = this.GuiCherry = this.UrlCherry;
 			isDirty = true;
 		}
+
+		if (this._lastDisplayedCherry != this.DisplayedCherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>チェリー］が変更されました。　（{this._lastDisplayedCherry}→{this.DisplayedCherry}）");
+			this._lastDisplayedCherry = this.DisplayedCherry;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// おわりに
 
 
 		if (firstRender)

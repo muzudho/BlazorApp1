@@ -236,10 +236,6 @@
 
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastUrlApple}");
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastUrlBanana}");
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastUrlCherry}");
-
 
 		// アップル
 
@@ -249,11 +245,6 @@
 			this.UrlApple = "Ringo";
 		}
 
-		if (this._lastUrlApple != this.UrlApple)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
-		}
-		this._lastUrlApple = this.UrlApple;
 		this.GuiApple = this.UrlApple;
 
 
@@ -265,11 +256,6 @@
 			this.UrlBanana = "Basho";
 		}
 
-		if (this._lastUrlBanana != this.UrlBanana)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
-		}
-		this._lastUrlBanana = this.UrlBanana;
 		this.GuiBanana = this.UrlBanana;
 
 
@@ -281,11 +267,6 @@
 			this.UrlCherry = null;
 		}
 
-		if (this._lastUrlCherry != this.UrlCherry)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
-		}
-		this._lastUrlCherry = this.UrlCherry;
 		this.GuiCherry = this.UrlCherry;
 	}
 
@@ -297,9 +278,58 @@
 		this.RenderingCount++;
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　描画後　firstRender = {firstRender}, RenderingCount = {this.RenderingCount}");
 
+		var isDirty = false;
+
+
+		// パラメーター変更検知
+
+
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>アップル］：{this._lastUrlApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>バナナ］：{this._lastUrlBanana}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>チェリー］：{this._lastUrlCherry}");
+
+
+		// アップル
+
+
+		if (this._lastUrlApple != this.UrlApple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
+			this._lastUrlApple = this.UrlApple;
+			isDirty = true;
+		}
+
+
+		// バナナ
+
+
+		if (this._lastUrlBanana != this.UrlBanana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
+			this._lastUrlBanana = this.UrlBanana;
+			isDirty = true;
+		}
+
+
+		// チェリー
+
+
+		if (this._lastUrlCherry != this.UrlCherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
+			this._lastUrlCherry = this.UrlCherry;
+			isDirty = true;
+		}
+
+
 		if (firstRender)
 		{
-			await this.InvokeAsync(this.StateHasChanged);	// `OnAfterRenderAsync()` 内で何か更新したら、もう１回再描画が必須。
+			isDirty = true;
+		}
+
+		if (isDirty)
+		{
+			await this.InvokeAsync(this.StateHasChanged);   // `OnAfterRenderAsync()` 内で何か更新したら、もう１回レンダーが必須。
 		}
 	}
 

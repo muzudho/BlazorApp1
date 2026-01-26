@@ -152,7 +152,7 @@
 	{
 		await base.OnParametersSetAsync();
 
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
+		System.Console.WriteLine($"[{DateTime.Now}][ＱueryParametersExample.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
 
 		// アップル
@@ -246,7 +246,7 @@
 
 	private void NavigateToSamePage()
 	{
-		System.Console.WriteLine("[{DateTime.Now}][Home.razor > ＮavigateToSamePage]　🔥　このページにまた飛ぶ");
+		System.Console.WriteLine($"[{DateTime.Now}][ＱueryParametersExample.razor > ＮavigateToSamePage]　🔥　このページにまた飛ぶ");
 		this.NavigationMgr.NavigateTo("https://localhost:7249/");
 	}
 }

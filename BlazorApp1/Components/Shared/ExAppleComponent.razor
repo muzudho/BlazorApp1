@@ -183,7 +183,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastApple}→{this.Apple}）");
 			this._lastApple = this.Apple;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedApple = this.Apple;
 		}
 
@@ -200,7 +200,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastBanana}→{this.Banana}）");
 			this._lastBanana = this.Banana;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedBanana = this.Banana;
 		}
 
@@ -217,7 +217,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastCherry}→{this.Cherry}）");
 			this._lastCherry = this.Cherry;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedCherry = this.Cherry ?? string.Empty;
 		}
 	}

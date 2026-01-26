@@ -243,7 +243,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
 			this._lastUrlApple = this.UrlApple;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedApple = this.GuiApple = this.UrlApple;
 		}
 
@@ -260,7 +260,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
 			this._lastUrlBanana = this.UrlBanana;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedBanana = this.GuiBanana = this.UrlBanana;
 		}
 
@@ -277,7 +277,7 @@
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
 			this._lastUrlCherry = this.UrlCherry;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
 			this.DisplayedCherry = this.GuiCherry = this.UrlCherry;
 		}
 	}

@@ -9,11 +9,39 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-@code {
-    private int currentCount = 0;
+<table>
+	<th>
+		<td>名前</td>
+		<td>値</td>
+	</th>
+	<tr>
+		<td>アップル</td>
+		<td>@this.UrlApple</td>
+	</tr>
+</table>
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+@code {
+	/// <summary>
+	///		<pre>
+	///	アップル
+	///
+	///		- ヌル時： null
+	///		</pre>
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Apple")]
+	public string? UrlApple { get; set; }
+
+	private int currentCount = 0;
+
+	private void IncrementCount()
+	{
+		currentCount++;
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		System.Console.WriteLine("[Counter.razor > OnInitialized]　🔥　初期化");
+	}
 }

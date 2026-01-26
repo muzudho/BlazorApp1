@@ -5,3 +5,114 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<table>
+	<th>
+		<td>名前</td>
+		<td>値</td>
+	</th>
+	<tr>
+		<td>アップル</td>
+		<td>@this.UrlApple</td>
+	</tr>
+	<tr>
+		<td>バナナ</td>
+		<td>@this.UrlBanana</td>
+	</tr>
+	<tr>
+		<td>チェリー</td>
+		<td>@this.UrlCherry</td>
+	</tr>
+	<tr>
+		<td>ドリアン</td>
+		<td>@this.UrlDurian</td>
+	</tr>
+	<tr>
+		<td>エッグ</td>
+		<td>@this.UrlEgg</td>
+	</tr>
+	<tr>
+		<td>フィグ</td>
+		<td>@this.UrlFig</td>
+	</tr>
+	<tr>
+		<td>グレープ</td>
+		<td>@this.UrlGrape</td>
+	</tr>
+</table>
+
+@code
+{
+	/// <summary>
+	///		<pre>
+	///	アップル
+	///	
+	///		- ヌル時： true
+	///		</pre>
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Apple")]
+	public string UrlApple { get; set; } = true.ToString();
+
+	/// <summary>
+	///		<pre>
+	///	バナナ
+	///
+	///		- ヌル時： false
+	///		- 空文字列時： string.Empty
+	///		</pre>
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Banana")]
+	public string? UrlBanana { get; set; } = String.Empty;
+
+	/// <summary>
+	/// チェリー
+	/// 
+	///		- ヌル時： null
+	///		- 空文字列時： string.Empty
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Cherry")]
+	public bool? UrlCherry { get; set; }
+
+	/// <summary>
+	/// ドリアン
+	///
+	///		- ヌル時： null
+	///		- 空文字列時： string.Empty
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Durian")]
+	public int? UrlDurian { get; set; }
+
+	/// <summary>
+	/// エッグ
+	///
+	///		- ヌル時： 7
+	///		- 空文字列時： string.Empty
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Egg")]
+	public int UrlEgg { get; set; } = 7;
+
+	/// <summary>
+	/// フィグ
+	///
+	///		- ヌル時： "Ichijiku"
+	///		- 空文字列時： string.Empty
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Fig")]
+	public string UrlFig { get; set; } = "Ichijiku";
+
+	/// <summary>
+	/// グレープ
+	///
+	///		- ヌル時： null
+	///		- 空文字列時： string.Empty
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Grape")]
+	public string? UrlGrape { get; set; }
+}

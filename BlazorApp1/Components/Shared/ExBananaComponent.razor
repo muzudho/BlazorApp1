@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Http
+<h3>ExBananaComponent</h3>
+
+<table>
+    <th>
+        <td>名前</td>
+        <td>値</td>
+    </th>
+    <tr>
+        <td>アップル</td>
+        <td>@this.Apple</td>
+    </tr>
+</table>
+
+@code {
+
+
+    // ========================================
+    // パラメーター
+    // ========================================
+    //
+    //      - パラメーターは、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
+
+
+    /// <summary>
+    ///     <pre>
+    /// アップル
+    ///     </pre>
+    /// </summary>
+    [Parameter]
+    public string? Apple { get; set; }
+
+}

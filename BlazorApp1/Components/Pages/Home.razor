@@ -48,12 +48,15 @@ Welcome to your new app.
 	// ========================================
 	// パラメーター
 	// ========================================
-
+	//
+	//		- クエリーパラメーター（URLの引数）は string? 型で受け取ってください。
+	//		- 値の初期化は `OnParametersSet()` または `OnParametersSetAsync()` 関数で行ってください。
 
 	/// <summary>
 	///		<pre>
 	///	アップル
 	///	
+	///		- ［期待］bool 型
 	///		- ［ヌル／空文字列／パース失敗］時： "True"
 	///		</pre>
 	/// </summary>
@@ -65,6 +68,7 @@ Welcome to your new app.
 	///		<pre>
 	///	バナナ
 	///
+	///		- ［期待］bool 型
 	///		- ［ヌル／空文字列／パース失敗］時： "False"
 	///		</pre>
 	/// </summary>
@@ -75,6 +79,7 @@ Welcome to your new app.
 	/// <summary>
 	/// チェリー
 	/// 
+	///		- ［期待］bool 型
 	///		- ［ヌル／空文字列／パース失敗］時： "False"
 	/// </summary>
 	[Parameter]
@@ -84,8 +89,8 @@ Welcome to your new app.
 	/// <summary>
 	/// ドリアン
 	///
-	///		- ヌル時： null
-	///		- 空文字列時： string.Empty
+	///		- ［期待］int 型
+	///		- ［ヌル／空文字列／パース失敗］時： ヌル
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Durian")]
@@ -94,28 +99,28 @@ Welcome to your new app.
 	/// <summary>
 	/// エッグ
 	///
-	///		- ヌル時： "7""
-	///		- 空文字列時： string.Empty
+	///		- ［期待］int 型
+	///		- ［ヌル／空文字列／パース失敗］時： "7"
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Egg")]
-	public string UrlEgg { get; set; } = "7";
+	public string UrlEgg { get; set; }
 
 	/// <summary>
 	/// フィグ
 	///
-	///		- ヌル時： "Ichijiku"
-	///		- 空文字列時： string.Empty
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列］時： "Ichijiku"
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Fig")]
-	public string? UrlFig { get; set; } = "Ichijiku";
+	public string? UrlFig { get; set; }
 
 	/// <summary>
 	/// グレープ
 	///
-	///		- ヌル時： null
-	///		- 空文字列時： string.Empty
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列］時： ""
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Grape")]
@@ -127,13 +132,27 @@ Welcome to your new app.
 	// ========================================
 
 
+	/// <summary>
+	///		<pre>
+	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		System.Console.WriteLine("[Home.razor > ＯnInitialized]　🔥　初期化");
+		System.Console.WriteLine("[Home.razor > ＯnInitialized]　🔥　ページ・インスタンス生成");
 	}
 
 
+	/// <summary>
+	///		<pre>
+	/// パラメーターセット時
+	/// 
+	///		- レンダー実行時に呼び出されます。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
 	protected override async Task OnParametersSetAsync()
 	{
 		await base.OnParametersSetAsync();
@@ -165,6 +184,34 @@ Welcome to your new app.
 		else
 		{
 			this.UrlCherry = urlCherry.ToString();
+		}
+
+		if (string.IsNullOrWhiteSpace(this.UrlDurian) || !int.TryParse(this.UrlDurian, out var urlDurian))
+		{
+			this.UrlDurian = null;
+		}
+		else
+		{
+			this.UrlDurian = urlDurian.ToString();
+		}
+
+		if (string.IsNullOrWhiteSpace(this.UrlEgg) || !int.TryParse(this.UrlEgg, out var urlEgg))
+		{
+			this.UrlEgg = 7.ToString();
+		}
+		else
+		{
+			this.UrlEgg = urlEgg.ToString();
+		}
+
+		if (string.IsNullOrWhiteSpace(this.UrlFig))
+		{
+			this.UrlFig = "Ichijiku";
+		}
+
+		if (string.IsNullOrWhiteSpace(this.UrlGrape))
+		{
+			this.UrlGrape = string.Empty;
 		}
 	}
 }

@@ -59,6 +59,7 @@
 	//		- クエリーパラメーター（URLの引数）は string? 型で受け取ってください。
 	//		- 値の初期化は `OnParametersSet()` または `OnParametersSetAsync()` 関数で行ってください。
 
+
 	/// <summary>
 	///		<pre>
 	///	アップル
@@ -153,6 +154,10 @@
 
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
+
+		// アップル
+
+
 		if (string.IsNullOrWhiteSpace(this.UrlApple) || !bool.TryParse(this.UrlApple, out var urlApple))
 		{
 			this.UrlApple = true.ToString();
@@ -161,6 +166,10 @@
 		{
 			this.UrlApple = urlApple.ToString();
 		}
+
+
+		// バナナ
+
 
 		if (string.IsNullOrWhiteSpace(this.UrlBanana) || !bool.TryParse(this.UrlBanana, out var urlBanana))
 		{
@@ -171,6 +180,10 @@
 			this.UrlBanana = urlBanana.ToString();
 		}
 
+
+		// チェリー
+
+
 		if (string.IsNullOrWhiteSpace(this.UrlCherry) || !bool.TryParse(this.UrlCherry, out var urlCherry))
 		{
 			this.UrlCherry = null;
@@ -179,6 +192,10 @@
 		{
 			this.UrlCherry = urlCherry.ToString();
 		}
+
+
+		// ドリアン
+
 
 		if (string.IsNullOrWhiteSpace(this.UrlDurian) || !int.TryParse(this.UrlDurian, out var urlDurian))
 		{
@@ -189,6 +206,10 @@
 			this.UrlDurian = urlDurian.ToString();
 		}
 
+
+		// エッグ
+
+
 		if (string.IsNullOrWhiteSpace(this.UrlEgg) || !int.TryParse(this.UrlEgg, out var urlEgg))
 		{
 			this.UrlEgg = 7.ToString();
@@ -198,10 +219,18 @@
 			this.UrlEgg = urlEgg.ToString();
 		}
 
+
+		// フィグ
+
+
 		if (string.IsNullOrWhiteSpace(this.UrlFig))
 		{
 			this.UrlFig = "Ichijiku";
 		}
+
+
+		// グレープ
+
 
 		if (string.IsNullOrWhiteSpace(this.UrlGrape))
 		{

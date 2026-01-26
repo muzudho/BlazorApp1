@@ -7,8 +7,9 @@
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<p>Welcome to your new app.</p>
 
+クエリーパラメーター：<br/>
 <table>
 	<th>
 		<td>名前</td>
@@ -26,28 +27,32 @@ Welcome to your new app.
 		<td>チェリー</td>
 		<td>@this.UrlCherry</td>
 	</tr>
+</table>
+
+ＧＵＩサンプル：
+<table>
+	<th>
+		<td>名前</td>
+		<td>値</td>
+	</th>
 	<tr>
-		<td>ドリアン</td>
-		<td>@this.UrlDurian</td>
+		<td>アップル</td>
+		<td><InputText @bind-Value="this.GuiApple" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
-		<td>エッグ</td>
-		<td>@this.UrlEgg</td>
+		<td>バナナ</td>
+		<td><InputText @bind-Value="this.GuiBanana" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
-		<td>フィグ</td>
-		<td>@this.UrlFig</td>
-	</tr>
-	<tr>
-		<td>グレープ</td>
-		<td>@this.UrlGrape</td>
+		<td>チェリー</td>
+		<td><InputText @bind-Value="this.GuiCherry" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 </table>
 
 <ul>
 	<li><a href="https://localhost:7249/">https://localhost:7249/</a></li>
-	<li><a href="https://localhost:7249/?apple=&banana=true&cherry=false&durian=&egg=100&fig=&grape=RichFlavor">https://localhost:7249/?apple=&banana=true&cherry=false&durian=&egg=100&fig=&grape=RichFlavor</a></li>
-	<li><a href="https://localhost:7249/?apple=false&banana=true&cherry=false&durian=&egg=100&fig=&grape=RichFlavor">https://localhost:7249/?apple=false&banana=true&cherry=false&durian=&egg=100&fig=&grape=RichFlavor</a></li>
+	<li><a href="https://localhost:7249/?apple=&banana=true&cherry=false">https://localhost:7249/?apple=&banana=true&cherry=false</a></li>
+	<li><a href="https://localhost:7249/?apple=false&banana=true&cherry=false">https://localhost:7249/?apple=false&banana=true&cherry=false</a></li>
 </ul>
 
 <button @onclick="NavigateToSamePage">自分のページへ飛ぶ</button><br/>
@@ -58,12 +63,14 @@ Welcome to your new app.
 <p>メッセージ： @this.Message</p>
 
 <ExBananaComponent
-	Apple="@this.UrlApple"></ExBananaComponent>
+	Apple="@this.GuiApple"
+	Banana="@this.GuiBanana"
+	Cherry="@this.GuiCherry" />
 
 <h2>Link</h2>
 
 <ul>
-	<li><a href="https://localhost:7249/query-parameters-example/">https://localhost:7249/query-parameters-example/</a></li>
+	<li><a href="https://localhost:7249/query-parameters-example/">クエリーパラメーターの特訓</a></li>
 </ul>
 
 
@@ -79,6 +86,9 @@ Welcome to your new app.
 	//		- 値の初期化は `OnParametersSet()` または `OnParametersSetAsync()` 関数で行ってください。
 
 
+	// アップル
+
+
 	/// <summary>
 	///		<pre>
 	///	アップル
@@ -90,6 +100,11 @@ Welcome to your new app.
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
 	public string? UrlApple { get; set; }
+	private string GuiApple { get; set; } = string.Empty;
+
+
+	// バナナ
+
 
 	/// <summary>
 	///		<pre>
@@ -102,6 +117,11 @@ Welcome to your new app.
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? UrlBanana { get; set; }
+	private string GuiBanana { get; set; } = string.Empty;
+
+
+	// チェリー
+
 
 	/// <summary>
 	/// チェリー
@@ -112,46 +132,7 @@ Welcome to your new app.
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
 	public string? UrlCherry { get; set; }
-
-	/// <summary>
-	/// ドリアン
-	///
-	///		- ［期待］int 型
-	///		- ［ヌル／空文字列／パース失敗］時： ヌル
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Durian")]
-	public string? UrlDurian { get; set; }
-
-	/// <summary>
-	/// エッグ
-	///
-	///		- ［期待］int 型
-	///		- ［ヌル／空文字列／パース失敗］時： "7"
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Egg")]
-	public string? UrlEgg { get; set; }
-
-	/// <summary>
-	/// フィグ
-	///
-	///		- ［期待］string 型
-	///		- ［ヌル／空文字列］時： "Ichijiku"
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Fig")]
-	public string? UrlFig { get; set; }
-
-	/// <summary>
-	/// グレープ
-	///
-	///		- ［期待］string 型
-	///		- ［ヌル／空文字列］時： ""
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Grape")]
-	public string? UrlGrape { get; set; }
+	private string GuiCherry { get; set; } = string.Empty;
 
 
 	// ========================================
@@ -228,6 +209,10 @@ Welcome to your new app.
 
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
+
+		// アップル
+
+
 		if (string.IsNullOrWhiteSpace(this.UrlApple) || !bool.TryParse(this.UrlApple, out var urlApple))
 		{
 			this.UrlApple = true.ToString();
@@ -236,6 +221,11 @@ Welcome to your new app.
 		{
 			this.UrlApple = urlApple.ToString();
 		}
+		this.GuiApple = this.UrlApple;
+
+
+		// バナナ
+
 
 		if (string.IsNullOrWhiteSpace(this.UrlBanana) || !bool.TryParse(this.UrlBanana, out var urlBanana))
 		{
@@ -245,6 +235,11 @@ Welcome to your new app.
 		{
 			this.UrlBanana = urlBanana.ToString();
 		}
+		this.GuiBanana = this.UrlBanana;
+
+
+		// チェリー
+
 
 		if (string.IsNullOrWhiteSpace(this.UrlCherry) || !bool.TryParse(this.UrlCherry, out var urlCherry))
 		{
@@ -254,34 +249,7 @@ Welcome to your new app.
 		{
 			this.UrlCherry = urlCherry.ToString();
 		}
-
-		if (string.IsNullOrWhiteSpace(this.UrlDurian) || !int.TryParse(this.UrlDurian, out var urlDurian))
-		{
-			this.UrlDurian = null;
-		}
-		else
-		{
-			this.UrlDurian = urlDurian.ToString();
-		}
-
-		if (string.IsNullOrWhiteSpace(this.UrlEgg) || !int.TryParse(this.UrlEgg, out var urlEgg))
-		{
-			this.UrlEgg = 7.ToString();
-		}
-		else
-		{
-			this.UrlEgg = urlEgg.ToString();
-		}
-
-		if (string.IsNullOrWhiteSpace(this.UrlFig))
-		{
-			this.UrlFig = "Ichijiku";
-		}
-
-		if (string.IsNullOrWhiteSpace(this.UrlGrape))
-		{
-			this.UrlGrape = string.Empty;
-		}
+		this.GuiCherry = this.UrlCherry;
 	}
 
 

@@ -10,6 +10,14 @@
         <td>アップル</td>
         <td>@this.Apple</td>
     </tr>
+    <tr>
+        <td>バナナ</td>
+        <td>@this.Banana</td>
+    </tr>
+    <tr>
+        <td>チェリー</td>
+        <td>@this.Cherry</td>
+    </tr>
 </table>
 
 @code {
@@ -22,6 +30,9 @@
     //      - パラメーターは、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
 
 
+    // アップル
+
+
     /// <summary>
     ///     <pre>
     /// アップル
@@ -30,4 +41,27 @@
     [Parameter]
     public string? Apple { get; set; }
 
+
+    // バナナ
+
+
+    /// <summary>
+    ///     <pre>
+    /// バナナ
+    ///     </pre>
+    /// </summary>
+    [Parameter]
+    public string? Banana { get; set; }
+
+
+    // チェリー
+
+
+    /// <summary>
+    ///     <pre>
+    /// チェリー
+    ///     </pre>
+    /// </summary>
+    [Parameter]
+    public string? Cherry { get; set; }
 }

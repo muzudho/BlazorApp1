@@ -84,9 +84,6 @@
 				   Banana="@this.DisplayedBanana"
 				   Cherry="@this.DisplayedCherry" />
 
-
-
-
 @code
 {
 
@@ -113,6 +110,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
 	public string? UrlApple { get; set; }
+	private string? _lastUrlApple;
 	private string GuiApple { get; set; } = string.Empty;
 	private string DisplayedApple { get; set; } = string.Empty;
 
@@ -131,6 +129,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? UrlBanana { get; set; }
+	private string? _lastUrlBanana;
 	private string GuiBanana { get; set; } = string.Empty;
 	private string DisplayedBanana { get; set; } = string.Empty;
 
@@ -141,14 +140,15 @@
 	/// <summary>
 	/// チェリー
 	/// 
-	///		- ［期待］bool 型
-	///		- ［ヌル／空文字列／パース失敗］時： "False"
+	///		- ［期待］bool 型、ヌル許容
+	///		- ［ヌル／空文字列／パース失敗］時： null
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
 	public string? UrlCherry { get; set; }
-	private string GuiCherry { get; set; } = string.Empty;
-	private string DisplayedCherry { get; set; } = string.Empty;
+	private string? _lastUrlCherry;
+	private string? GuiCherry { get; set; }
+	private string? DisplayedCherry { get; set; }
 
 
 	// ========================================
@@ -208,6 +208,10 @@
 		var oldInitializationCount = this.InitializationCount;
 		this.InitializationCount++;
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　ページ初期化回数： （{oldInitializationCount}→{this.InitializationCount}）　ちなみにページ遷移回数： {this.LeaveCount}");
+
+		// XXX: カウンターをリセットする悪戯をする。ここでリセットしても、前の値が残っていれば、それで上書きされる？
+		this.LeaveCount = 0;
+		this.RenderingCount = 0;
 	}
 
 
@@ -225,6 +229,10 @@
 
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　🔥　パラメーターズセット");
 
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastUrlApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastUrlBanana}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastUrlCherry}");
+
 
 		// アップル
 
@@ -237,6 +245,12 @@
 		{
 			this.UrlApple = urlApple.ToString();
 		}
+
+		if (this._lastUrlApple != this.UrlApple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
+		}
+		this._lastUrlApple = this.UrlApple;
 		this.GuiApple = this.UrlApple;
 
 
@@ -251,6 +265,12 @@
 		{
 			this.UrlBanana = urlBanana.ToString();
 		}
+
+		if (this._lastUrlBanana != this.UrlBanana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
+		}
+		this._lastUrlBanana = this.UrlBanana;
 		this.GuiBanana = this.UrlBanana;
 
 
@@ -265,6 +285,12 @@
 		{
 			this.UrlCherry = urlCherry.ToString();
 		}
+
+		if (this._lastUrlCherry != this.UrlCherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
+		}
+		this._lastUrlCherry = this.UrlCherry;
 		this.GuiCherry = this.UrlCherry;
 	}
 

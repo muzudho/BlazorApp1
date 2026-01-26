@@ -20,50 +20,8 @@
 
 <h2>練習中</h2>
 
-クエリーパラメーター：<br/>
-<table>
-	<th>
-		<td>名前</td>
-		<td>値</td>
-	</th>
-	<tr>
-		<td>アップル</td>
-		<td>@this.UrlApple</td>
-	</tr>
-	<tr>
-		<td>バナナ</td>
-		<td>@this.UrlBanana</td>
-	</tr>
-	<tr>
-		<td>チェリー</td>
-		<td>@this.UrlCherry</td>
-	</tr>
-</table>
-
-ＧＵＩサンプル：
-<table>
-	<th>
-		<td>名前</td>
-		<td>値</td>
-	</th>
-	<tr>
-		<td>アップル</td>
-		<td><InputText @bind-Value="this.GuiApple" placeholder="ここに打て（＾～＾）" /></td>
-	</tr>
-	<tr>
-		<td>バナナ</td>
-		<td><InputText @bind-Value="this.GuiBanana" placeholder="ここに打て（＾～＾）" /></td>
-	</tr>
-	<tr>
-		<td>チェリー</td>
-		<td><InputText @bind-Value="this.GuiCherry" placeholder="ここに打て（＾～＾）" /></td>
-	</tr>
-</table>
-
 <ul>
 	<li><a href="https://localhost:7249/">https://localhost:7249/</a></li>
-	<li><a href="https://localhost:7249/?apple=&banana=&cherry=">https://localhost:7249/?apple=&banana=&cherry=</a></li>
-	<li><a href="https://localhost:7249/?apple=APPLE&banana=BANANA&cherry=CHERRY">https://localhost:7249/?apple=APPLE&banana=BANANA&cherry=CHERRY</a></li>
 </ul>
 
 <button @onclick="this.NavigateToSamePage">自分のページへ飛ぶ</button><br/>
@@ -74,87 +32,9 @@
 <p>重い処理の回数： @this.HeavylyProcessCount</p>
 <p>メッセージ： @this.Message</p>
 
-<ExBananaComponent Title="GUI一時値"
-				   Apple="@this.GuiApple"
-				   Banana="@this.GuiBanana"
-				   Cherry="@this.GuiCherry" />
-
-<button @onclick="this.SearchDammy">検索（ダミー）</button>
-<br />
-
-<ExBananaComponent Title="GUI確定値"
-				   Apple="@this.DisplayedApple"
-				   Banana="@this.DisplayedBanana"
-				   Cherry="@this.DisplayedCherry" />
 
 @code
 {
-
-
-	// ========================================
-	// パラメーター
-	// ========================================
-	//
-	//		- クエリーパラメーター（URLの引数）は string? 型で受け取ってください。
-	//		- 値の初期化は `OnParametersSet()` または `OnParametersSetAsync()` 関数で行ってください。
-
-
-	// アップル
-
-
-	/// <summary>
-	///		<pre>
-	///	アップル
-	///	
-	///		- ［期待］string 型
-	///		- ［ヌル／空文字列／パース失敗］時： "Ringo"
-	///		</pre>
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Apple")]
-	public string? UrlApple { get; set; }
-	private string? _lastUrlApple;
-	private string GuiApple { get; set; } = "Ringo";
-	private string DisplayedApple { get; set; } = "Ringo";
-	private string _lastDisplayedApple = "Ringo";
-
-
-	// バナナ
-
-
-	/// <summary>
-	///		<pre>
-	///	バナナ
-	///
-	///		- ［期待］string 型
-	///		- ［ヌル／空文字列／パース失敗］時： "Basho"
-	///		</pre>
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Banana")]
-	public string? UrlBanana { get; set; }
-	private string? _lastUrlBanana;
-	private string GuiBanana { get; set; } = "Basho";
-	private string DisplayedBanana { get; set; } = "Basho";
-	private string _lastDisplayedBanana = "Basho";
-
-
-	// チェリー
-
-
-	/// <summary>
-	/// チェリー
-	/// 
-	///		- ［期待］string 型、ヌル許容
-	///		- ［ヌル／空文字列／パース失敗］時： null
-	/// </summary>
-	[Parameter]
-	[SupplyParameterFromQuery(Name = "Cherry")]
-	public string? UrlCherry { get; set; }
-	private string? _lastUrlCherry;
-	private string? GuiCherry { get; set; }
-	private string? DisplayedCherry { get; set; }
-	private string? _lastDisplayedCherry;
 
 
 	// ========================================
@@ -260,130 +140,15 @@
 		this.RenderingCount++;
 		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　◆２２◆　描画後　firstRender = {firstRender}, RenderingCount = {this.RenderingCount}");
 
-		var isDirty = false;
-
-
-		// パラメーター変更検知
-
-
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>アップル］：{this._lastUrlApple}");
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>バナナ］：{this._lastUrlBanana}");
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　前回の値［URL>チェリー］：{this._lastUrlCherry}");
-
-
-		// アップル
-
-
-		if (string.IsNullOrWhiteSpace(this.UrlApple))
-		{
-			this.UrlApple = "Ringo";
-		}
-
-		if (this._lastUrlApple != this.UrlApple)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
-			this._lastUrlApple = this.UrlApple;
-			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
-			this.DisplayedApple = this.GuiApple = this.UrlApple;
-			isDirty = true;
-		}
-
-		if (this._lastDisplayedApple != this.DisplayedApple)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>アップル］が変更されました。　（{this._lastDisplayedApple}→{this.DisplayedApple}）");
-			this._lastDisplayedApple = this.DisplayedApple;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
-			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
-
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
-			});
-		}
-
-
-		// バナナ
-
-
-		if (string.IsNullOrWhiteSpace(this.UrlBanana))
-		{
-			this.UrlBanana = "Basho";
-		}
-
-		if (this._lastUrlBanana != this.UrlBanana)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
-			this._lastUrlBanana = this.UrlBanana;
-			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
-			this.DisplayedBanana = this.GuiBanana = this.UrlBanana;
-			isDirty = true;
-		}
-
-		if (this._lastDisplayedBanana != this.DisplayedBanana)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>バナナ］が変更されました。　（{this._lastDisplayedBanana}→{this.DisplayedBanana}）");
-			this._lastDisplayedBanana = this.DisplayedBanana;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
-			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
-
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
-			});
-		}
-
-
-		// チェリー
-
-
-		if (string.IsNullOrWhiteSpace(this.UrlCherry))
-		{
-			this.UrlCherry = null;
-		}
-
-		if (this._lastUrlCherry != this.UrlCherry)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
-			this._lastUrlCherry = this.UrlCherry;
-			// ［クエリーパラメーター］の変更は［GUI］［ディスプレイ］へ反映
-			this.DisplayedCherry = this.GuiCherry = this.UrlCherry;
-			isDirty = true;
-		}
-
-		if (this._lastDisplayedCherry != this.DisplayedCherry)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnParametersSetAsync]　［Display>チェリー］が変更されました。　（{this._lastDisplayedCherry}→{this.DisplayedCherry}）");
-			this._lastDisplayedCherry = this.DisplayedCherry;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
-			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
-
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
-			});
-		}
-
 
 		// おわりに
 
 
 		if (firstRender)
 		{
-			isDirty = true;
-		}
-
-		if (isDirty)
-		{
+			// ここで何か更新
 			await this.InvokeAsync(this.StateHasChanged);   // `OnAfterRenderAsync()` 内で何か更新したら、もう１回レンダーが必須。
+			return;
 		}
 	}
 
@@ -391,19 +156,6 @@
 	// ========================================
 	// イベントハンドラ
 	// ========================================
-
-
-	/// <summary>
-	/// ［検索］ダミーボタン
-	/// </summary>
-	private void SearchDammy()
-	{
-		System.Console.WriteLine("[{DateTime.Now}][Home.razor > ＳearchDammy]　🔥　検索ダミーボタン");
-
-		this.DisplayedApple = this.GuiApple;
-		this.DisplayedBanana = this.GuiBanana;
-		this.DisplayedCherry = this.GuiCherry;
-	}
 
 
 	private void NavigateToSamePage()

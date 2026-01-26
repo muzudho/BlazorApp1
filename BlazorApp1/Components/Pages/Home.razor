@@ -51,7 +51,8 @@ Welcome to your new app.
 <button @onclick="NavigateToSamePage">自分のページへ飛ぶ</button><br/>
 
 <p>初期化回数： @this.InitializationCount</p>
-<p>ページ遷移回数： @this.NavigationCount</p>
+<p>ページ遷移回数： @this.LeaveCount</p>
+<p>レンダー回数： @this.RenderingCount</p>
 <p>メッセージ： @this.Message</p>
 
 @code
@@ -162,13 +163,22 @@ Welcome to your new app.
 	/// <summary>
 	///		<pre>
 	///	ページ遷移回数
+	///	
+	///		- 同じページに再アクセスしたとき、値が残っている。（ `OnInitializeAsync()` メソッドを除く）
 	///		</pre>
 	/// </summary>
-	private int NavigationCount = 0;
+	private int LeaveCount = 0;
+
+	/// <summary>
+	///		<pre>
+	///	レンダー回数
+	///		</pre>
+	/// </summary>
+	private int RenderingCount = 0;
 
 
 	// ========================================
-	// スケジュール
+	// ライフサイクルメソッド
 	// ========================================
 
 
@@ -176,7 +186,7 @@ Welcome to your new app.
 	///		<pre>
 	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
 	///	
-	///		- このメソッドが呼び出されるとき、このページのインスタンスのプロパティは初期値に戻っている。レンダーすると、前の値が残っている。仕組みがさっぱり分からない。
+	///		- 同じページに再アクセスしたとき、このメソッドは呼び出されるが、そのとき、このページのインスタンスのプロパティは初期値に戻っている。しかし、レンダーすると、前の値が残っている。仕組みがさっぱり分からない。
 	///		</pre>
 	/// </summary>
 	/// <returns></returns>
@@ -187,7 +197,7 @@ Welcome to your new app.
 
 		var oldInitializationCount = this.InitializationCount;
 		this.InitializationCount++;
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　ページ初期化回数： （{oldInitializationCount}→{this.InitializationCount}）　ちなみにページ遷移回数： {this.NavigationCount}");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　ページ初期化回数： （{oldInitializationCount}→{this.InitializationCount}）　ちなみにページ遷移回数： {this.LeaveCount}");
 	}
 
 
@@ -262,6 +272,20 @@ Welcome to your new app.
 	}
 
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await base.OnAfterRenderAsync(firstRender);
+
+		this.RenderingCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　描画後　firstRender = {firstRender}, RenderingCount = {this.RenderingCount}");
+
+		if (firstRender)
+		{
+			await this.InvokeAsync(this.StateHasChanged);	// `OnAfterRenderAsync()` 内で何か更新したら、もう１回再描画が必須。
+		}
+	}
+
+
 	// ========================================
 	// イベントハンドラ
 	// ========================================
@@ -275,6 +299,6 @@ Welcome to your new app.
 		this.Message = "同じページへ飛んだ。";
 
 		this.NavigationMgr.NavigateTo("https://localhost:7249/");
-		this.NavigationCount++;
+		this.LeaveCount++;
 	}
 }

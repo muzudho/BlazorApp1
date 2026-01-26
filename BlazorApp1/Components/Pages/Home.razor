@@ -240,34 +240,18 @@
 		// アップル
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlApple))
-		{
-			this.UrlApple = "Ringo";
-		}
-
-		this.GuiApple = this.UrlApple;
 
 
 		// バナナ
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlBanana))
-		{
-			this.UrlBanana = "Basho";
-		}
 
-		this.GuiBanana = this.UrlBanana;
 
 
 		// チェリー
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlCherry))
-		{
-			this.UrlCherry = null;
-		}
 
-		this.GuiCherry = this.UrlCherry;
 	}
 
 
@@ -292,10 +276,17 @@
 		// アップル
 
 
+		if (string.IsNullOrWhiteSpace(this.UrlApple))
+		{
+			this.UrlApple = "Ringo";
+		}
+
 		if (this._lastUrlApple != this.UrlApple)
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
 			this._lastUrlApple = this.UrlApple;
+			// ［クエリーパラメーター］の変更は［GUI］へ反映
+			this.GuiApple = this.UrlApple;
 			isDirty = true;
 		}
 
@@ -303,10 +294,16 @@
 		// バナナ
 
 
+		if (string.IsNullOrWhiteSpace(this.UrlBanana))
+		{
+			this.UrlBanana = "Basho";
+		}
+
 		if (this._lastUrlBanana != this.UrlBanana)
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
 			this._lastUrlBanana = this.UrlBanana;
+			this.GuiBanana = this.UrlBanana;
 			isDirty = true;
 		}
 
@@ -314,10 +311,16 @@
 		// チェリー
 
 
+		if (string.IsNullOrWhiteSpace(this.UrlCherry))
+		{
+			this.UrlCherry = null;
+		}
+
 		if (this._lastUrlCherry != this.UrlCherry)
 		{
 			System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnAfterRenderAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
 			this._lastUrlCherry = this.UrlCherry;
+			this.GuiCherry = this.UrlCherry;
 			isDirty = true;
 		}
 

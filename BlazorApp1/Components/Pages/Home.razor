@@ -43,16 +43,23 @@ Welcome to your new app.
 
 @code
 {
+
+
+	// ========================================
+	// パラメーター
+	// ========================================
+
+
 	/// <summary>
 	///		<pre>
 	///	アップル
 	///	
-	///		- ヌル時： true
+	///		- ［ヌル／空文字列／パース失敗］時： "True"
 	///		</pre>
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
-	public string UrlApple { get; set; } = true.ToString();
+	public string? UrlApple { get; set; }
 
 	/// <summary>
 	///		<pre>
@@ -74,7 +81,7 @@ Welcome to your new app.
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
-	public bool? UrlCherry { get; set; }
+	public string? UrlCherry { get; set; }
 
 	/// <summary>
 	/// ドリアン
@@ -84,17 +91,17 @@ Welcome to your new app.
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Durian")]
-	public int? UrlDurian { get; set; }
+	public string? UrlDurian { get; set; }
 
 	/// <summary>
 	/// エッグ
 	///
-	///		- ヌル時： 7
+	///		- ヌル時： "7""
 	///		- 空文字列時： string.Empty
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Egg")]
-	public int UrlEgg { get; set; } = 7;
+	public string UrlEgg { get; set; } = "7";
 
 	/// <summary>
 	/// フィグ
@@ -104,7 +111,7 @@ Welcome to your new app.
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Fig")]
-	public string UrlFig { get; set; } = "Ichijiku";
+	public string? UrlFig { get; set; } = "Ichijiku";
 
 	/// <summary>
 	/// グレープ
@@ -115,4 +122,33 @@ Welcome to your new app.
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Grape")]
 	public string? UrlGrape { get; set; }
+
+
+	// ========================================
+	// スケジュール
+	// ========================================
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		System.Console.WriteLine("[Home.razor > ＯnInitialized]　🔥　初期化");
+	}
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		await base.OnParametersSetAsync();
+
+		if (string.IsNullOrWhiteSpace(this.UrlApple) || !bool.TryParse(this.UrlApple, out var urlApple))
+		{
+			this.UrlApple = true.ToString();
+		}
+		else
+		{
+			this.UrlApple = urlApple.ToString();
+		}
+
+		System.Console.WriteLine("[Home.razor > ＯnParametersSetAsync]　🔥　初期化");
+	}
 }

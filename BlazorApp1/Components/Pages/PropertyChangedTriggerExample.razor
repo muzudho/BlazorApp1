@@ -81,7 +81,8 @@
 	// ========================================
 	//
 	//		- クエリーパラメーター（URLの引数）は string? 型で受け取ってください。
-	//		- 値の初期化は `OnParametersSet()` または `OnParametersSetAsync()` 関数で行ってください。
+	//		- 値の初期化は `OnAfterRenderAsync()` 関数で行ってください。 `OnParametersSetAsync()` は取り扱いが難しいです。
+	//		- データベースからの読込など重い処理は、`OnAfterRenderAsync()` 関数では行わず、バックグラウンド・スレッドで行ってください。
 
 
 	// アップル
@@ -97,11 +98,11 @@
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
-	public string? UrlApple { get; set; }
-	private string? _lastUrlApple;
-	private string GuiApple { get; set; } = "Ringo";
-	private string DisplayedApple { get; set; } = "Ringo";
-	private string _lastDisplayedApple = "Ringo";
+	public string? UrlApple { get; set; }					// クエリーパラメーターをそのまま格納してください。
+	private string? _lastUrlApple;							// 変更前のクエリーパラメーターをそのまま格納してください。
+	private string GuiApple { get; set; } = "Ringo";		// コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+	private string DisplayedApple { get; set; } = "Ringo";  // 確定値です。画面の表示は、この値を元にします。
+	private string _lastDisplayedApple = "Ringo";			// 変更前の確定値を格納してください。
 
 
 	// バナナ

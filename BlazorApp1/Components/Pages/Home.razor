@@ -55,17 +55,26 @@
 	<li><a href="https://localhost:7249/?apple=false&banana=true&cherry=false">https://localhost:7249/?apple=false&banana=true&cherry=false</a></li>
 </ul>
 
-<button @onclick="NavigateToSamePage">自分のページへ飛ぶ</button><br/>
+<button @onclick="this.NavigateToSamePage">自分のページへ飛ぶ</button><br/>
 
 <p>初期化回数： @this.InitializationCount</p>
 <p>ページ遷移回数： @this.LeaveCount</p>
 <p>レンダー回数： @this.RenderingCount</p>
 <p>メッセージ： @this.Message</p>
 
-<ExBananaComponent
-	Apple="@this.GuiApple"
-	Banana="@this.GuiBanana"
-	Cherry="@this.GuiCherry" />
+<ExBananaComponent Title="GUI一時値"
+				   Apple="@this.GuiApple"
+				   Banana="@this.GuiBanana"
+				   Cherry="@this.GuiCherry" />
+
+<button @onclick="this.SearchDammy">検索（ダミー）</button>
+<br />
+
+<ExBananaComponent Title="GUI確定値"
+				   Apple="@this.DisplayedApple"
+				   Banana="@this.DisplayedBanana"
+				   Cherry="@this.DisplayedCherry" />
+
 
 <h2>Link</h2>
 
@@ -101,6 +110,7 @@
 	[SupplyParameterFromQuery(Name = "Apple")]
 	public string? UrlApple { get; set; }
 	private string GuiApple { get; set; } = string.Empty;
+	private string DisplayedApple { get; set; } = string.Empty;
 
 
 	// バナナ
@@ -118,6 +128,7 @@
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? UrlBanana { get; set; }
 	private string GuiBanana { get; set; } = string.Empty;
+	private string DisplayedBanana { get; set; } = string.Empty;
 
 
 	// チェリー
@@ -133,6 +144,7 @@
 	[SupplyParameterFromQuery(Name = "Cherry")]
 	public string? UrlCherry { get; set; }
 	private string GuiCherry { get; set; } = string.Empty;
+	private string DisplayedCherry { get; set; } = string.Empty;
 
 
 	// ========================================
@@ -270,6 +282,19 @@
 	// ========================================
 	// イベントハンドラ
 	// ========================================
+
+
+	/// <summary>
+	/// ［検索］ダミーボタン
+	/// </summary>
+	private void SearchDammy()
+	{
+		System.Console.WriteLine("[{DateTime.Now}][Home.razor > ＳearchDammy]　🔥　検索ダミーボタン");
+
+		this.DisplayedApple = this.GuiApple;
+		this.DisplayedBanana = this.GuiBanana;
+		this.DisplayedCherry = this.GuiCherry;
+	}
 
 
 	private void NavigateToSamePage()

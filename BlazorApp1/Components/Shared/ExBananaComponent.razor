@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
-<h3>ExBananaComponent</h3>
+<h3>@this.Title</h3>
 
 <table>
     <th>
@@ -28,6 +28,18 @@
     // ========================================
     //
     //      - パラメーターは、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
+
+
+    // タイトル
+
+
+    /// <summary>
+    ///     <pre>
+    /// アップル
+    ///     </pre>
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
 
 
     // アップル

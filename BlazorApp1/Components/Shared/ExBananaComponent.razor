@@ -20,6 +20,10 @@
     </tr>
 </table>
 
+<p>パラメーターズセット回数： @this.ParametersSetCount</p>
+<p>レンダー回数： @this.RenderingCount</p>
+<p>重い処理の回数： @this.HeavylyProcessCount</p>
+
 @code {
 
 
@@ -27,7 +31,7 @@
     // パラメーター
     // ========================================
     //
-    //      - パラメーターは、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
+    //      - ［クエリーパラメーター」、［ＸＭＬタグ・パラメーター］は、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
 
 
     // タイトル
@@ -39,7 +43,7 @@
     ///     </pre>
     /// </summary>
     [Parameter]
-    public string? Title { get; set; }
+    public string? Title { get; set; }                              // ［ＸＭＬタグ・パラメーター］がそのまま格納されます。
 
 
     // アップル
@@ -51,7 +55,11 @@
     ///     </pre>
     /// </summary>
     [Parameter]
-    public string? Apple { get; set; }
+	public string? Apple { get; set; }                              // ［ＸＭＬタグ・パラメーター］がそのまま格納されます。
+    private string? _lastApple;                                     // 変更前のパラメーターをそのまま格納してください。
+    private string GuiApple { get; set; } = string.Empty;           // コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+    private string DisplayedApple { get; set; } = string.Empty;     // 確定値です。画面の表示は、この値を元にします。
+    private string _lastDisplayedApple = string.Empty;			    // 変更前の確定値を格納してください。
 
 
     // バナナ
@@ -63,7 +71,11 @@
     ///     </pre>
     /// </summary>
     [Parameter]
-    public string? Banana { get; set; }
+	public string? Banana { get; set; }                             // ［ＸＭＬタグ・パラメーター］がそのまま格納されます。
+    private string? _lastBanana;                                    // 変更前のパラメーターをそのまま格納してください。
+    private string GuiBanana { get; set; } = string.Empty;          // コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+    private string DisplayedBanana { get; set; } = string.Empty;    // 確定値です。画面の表示は、この値を元にします。
+    private string _lastDisplayedBanana = string.Empty;			    // 変更前の確定値を格納してください。
 
 
     // チェリー
@@ -75,5 +87,224 @@
     ///     </pre>
     /// </summary>
     [Parameter]
-    public string? Cherry { get; set; }
+	public string? Cherry { get; set; }                             // ［ＸＭＬタグ・パラメーター］がそのまま格納されます。
+    private string? _lastCherry;                                    // 変更前のパラメーターをそのまま格納してください。
+    private string GuiCherry { get; set; } = string.Empty;          // コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+    private string DisplayedCherry { get; set; } = string.Empty;    // 確定値です。画面の表示は、この値を元にします。
+    private string _lastDisplayedCherry = string.Empty;			    // 変更前の確定値を格納してください。
+
+
+    // ========================================
+    // プロパティ
+    // ========================================
+
+
+    /// <summary>
+    ///		<pre>
+    ///	パラメーターズセット回数
+    ///		</pre>
+    /// </summary>
+    private int ParametersSetCount = 0;
+
+    /// <summary>
+    ///		<pre>
+    ///	レンダー回数
+    ///		</pre>
+    /// </summary>
+    private int RenderingCount = 0;
+
+    /// <summary>
+    ///		<pre>
+    ///	重い処理の回数
+    ///		</pre>
+    /// </summary>
+    private int HeavylyProcessCount = 0;
+
+
+	// ========================================
+	// ライフサイクルメソッド
+	// ========================================
+
+
+	public async ValueTask DisposeAsync()
+	{
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＤisposeAsync]　■■■■■　破棄: DisposeAsync 呼ばれたぜ！");
+	}
+
+
+	/// <summary>
+	///		<pre>
+	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
+	///
+	///		- 同じページに再アクセスしたとき、このメソッドは呼び出されるが、そのとき、このページのインスタンスのプロパティは初期値に戻っている。しかし、レンダーすると、前の値が残っている。仕組みがさっぱり分からない。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnInitialized]　■■■■■　ページ・インスタンス生成");
+	}
+
+
+	/// <summary>
+	///		<pre>
+	/// パラメーターセット時
+	///
+	///		- レンダー実行時に呼び出されます。
+	///		- ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］が更新されているかもしれません。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
+	protected override async Task OnParametersSetAsync()
+	{
+		await base.OnParametersSetAsync();
+
+		this.ParametersSetCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　◆１１◆　パラメーターズセット　{this.ParametersSetCount}回目");
+
+		// ここで何か処理をすると、ログに［サーバーサイド・レンダリング］と［クライアントサイド・レンダリング］の２つが被って出力されて、ログが見にくくなることに注意してください。
+
+
+		// パラメーター変更検知
+
+
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastBanana}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastCherry}");
+
+
+		// アップル
+
+
+		if (string.IsNullOrWhiteSpace(this.Apple))
+		{
+			this.Apple = "Ringo";
+		}
+
+		if (this._lastApple != this.Apple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastApple}→{this.Apple}）");
+			this._lastApple = this.Apple;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedApple = this.GuiApple = this.Apple;
+		}
+
+
+		// バナナ
+
+
+		if (string.IsNullOrWhiteSpace(this.Banana))
+		{
+			this.Banana = "Basho";
+		}
+
+		if (this._lastBanana != this.Banana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastBanana}→{this.Banana}）");
+			this._lastBanana = this.Banana;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedBanana = this.GuiBanana = this.Banana;
+		}
+
+
+		// チェリー
+
+
+		if (string.IsNullOrWhiteSpace(this.Cherry))
+		{
+			this.Cherry = null;
+		}
+
+		if (this._lastCherry != this.Cherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastCherry}→{this.Cherry}）");
+			this._lastCherry = this.Cherry;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ反映
+			this.DisplayedCherry = this.GuiCherry = this.Cherry;
+		}
+	}
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await base.OnAfterRenderAsync(firstRender);
+
+		this.RenderingCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnAfterRenderAsync]　◆２２◆　描画後　{this.RenderingCount}回目　（firstRender = {firstRender}）");
+
+
+		// ［パラメーター変更検知］から［バックグラウンド・スレッド処理］まで
+
+
+		// アップル
+
+
+		if (this._lastDisplayedApple != this.DisplayedApple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{this._lastDisplayedApple}→{this.DisplayedApple}）");
+			this._lastDisplayedApple = this.DisplayedApple;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// バナナ
+
+
+		if (this._lastDisplayedBanana != this.DisplayedBanana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{this._lastDisplayedBanana}→{this.DisplayedBanana}）");
+			this._lastDisplayedBanana = this.DisplayedBanana;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// チェリー
+
+
+		if (this._lastDisplayedCherry != this.DisplayedCherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＥxBananaComponent.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{this._lastDisplayedCherry}→{this.DisplayedCherry}）");
+			this._lastDisplayedCherry = this.DisplayedCherry;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// おわりに
+
+
+		if (firstRender)
+		{
+			// ここで何か更新。
+			await this.InvokeAsync(this.StateHasChanged);   // `OnAfterRenderAsync()` 内で何か更新したら、もう１回レンダーが必須。
+			return;
+		}
+	}
 }

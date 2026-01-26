@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BlazorApp1.Components.Shared
+@implements IAsyncDisposable	// これでDisposeを有効化
 @rendermode InteractiveServer	// ボタンの @onclick に必要
 @inject NavigationManager NavigationMgr
 
@@ -60,8 +61,8 @@
 
 <ul>
 	<li><a href="https://localhost:7249/">https://localhost:7249/</a></li>
-	<li><a href="https://localhost:7249/?apple=&banana=true&cherry=false">https://localhost:7249/?apple=&banana=true&cherry=false</a></li>
-	<li><a href="https://localhost:7249/?apple=false&banana=true&cherry=false">https://localhost:7249/?apple=false&banana=true&cherry=false</a></li>
+	<li><a href="https://localhost:7249/?apple=&banana=&cherry=">https://localhost:7249/?apple=&banana=&cherry=</a></li>
+	<li><a href="https://localhost:7249/?apple=APPLE&banana=BANANA&cherry=CHERRY">https://localhost:7249/?apple=APPLE&banana=BANANA&cherry=CHERRY</a></li>
 </ul>
 
 <button @onclick="this.NavigateToSamePage">自分のページへ飛ぶ</button><br/>
@@ -103,16 +104,16 @@
 	///		<pre>
 	///	アップル
 	///	
-	///		- ［期待］bool 型
-	///		- ［ヌル／空文字列／パース失敗］時： "True"
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列／パース失敗］時： "Ringo"
 	///		</pre>
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
 	public string? UrlApple { get; set; }
 	private string? _lastUrlApple;
-	private string GuiApple { get; set; } = string.Empty;
-	private string DisplayedApple { get; set; } = string.Empty;
+	private string GuiApple { get; set; } = "Ringo";
+	private string DisplayedApple { get; set; } = "Ringo";
 
 
 	// バナナ
@@ -122,16 +123,16 @@
 	///		<pre>
 	///	バナナ
 	///
-	///		- ［期待］bool 型
-	///		- ［ヌル／空文字列／パース失敗］時： "False"
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列／パース失敗］時： "Basho"
 	///		</pre>
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? UrlBanana { get; set; }
 	private string? _lastUrlBanana;
-	private string GuiBanana { get; set; } = string.Empty;
-	private string DisplayedBanana { get; set; } = string.Empty;
+	private string GuiBanana { get; set; } = "Basho";
+	private string DisplayedBanana { get; set; } = "Basho";
 
 
 	// チェリー
@@ -140,7 +141,7 @@
 	/// <summary>
 	/// チェリー
 	/// 
-	///		- ［期待］bool 型、ヌル許容
+	///		- ［期待］string 型、ヌル許容
 	///		- ［ヌル／空文字列／パース失敗］時： null
 	/// </summary>
 	[Parameter]
@@ -192,6 +193,12 @@
 	// ========================================
 
 
+	public async ValueTask DisposeAsync()
+	{
+		System.Console.WriteLine($"[{DateTime.Now}]　■■■■■　破棄: DisposeAsync 呼ばれたぜ！");
+	}
+
+
 	/// <summary>
 	///		<pre>
 	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
@@ -203,7 +210,7 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　🔥　ページ・インスタンス生成");
+		System.Console.WriteLine($"[{DateTime.Now}][Home.razor > ＯnInitialized]　■■■■■　ページ・インスタンス生成");
 
 		var oldInitializationCount = this.InitializationCount;
 		this.InitializationCount++;
@@ -237,13 +244,9 @@
 		// アップル
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlApple) || !bool.TryParse(this.UrlApple, out var urlApple))
+		if (string.IsNullOrWhiteSpace(this.UrlApple))
 		{
-			this.UrlApple = true.ToString();
-		}
-		else
-		{
-			this.UrlApple = urlApple.ToString();
+			this.UrlApple = "Ringo";
 		}
 
 		if (this._lastUrlApple != this.UrlApple)
@@ -257,13 +260,9 @@
 		// バナナ
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlBanana) || !bool.TryParse(this.UrlBanana, out var urlBanana))
+		if (string.IsNullOrWhiteSpace(this.UrlBanana))
 		{
-			this.UrlBanana = false.ToString();
-		}
-		else
-		{
-			this.UrlBanana = urlBanana.ToString();
+			this.UrlBanana = "Basho";
 		}
 
 		if (this._lastUrlBanana != this.UrlBanana)
@@ -277,13 +276,9 @@
 		// チェリー
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlCherry) || !bool.TryParse(this.UrlCherry, out var urlCherry))
+		if (string.IsNullOrWhiteSpace(this.UrlCherry))
 		{
 			this.UrlCherry = null;
-		}
-		else
-		{
-			this.UrlCherry = urlCherry.ToString();
 		}
 
 		if (this._lastUrlCherry != this.UrlCherry)

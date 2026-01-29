@@ -13,11 +13,11 @@ public class ComponentVariable<S, R>
 
     public S? Source { get; set; }
 
-    private S? _lastSource;
+    protected S? _lastSource;
 
     public R? Result { get; set; }
 
-    private R? _lastResult;
+    protected R? _lastResult;
 
 
     // ========================================
@@ -36,7 +36,7 @@ public class ComponentVariable<S, R>
     // ========================================
 
 
-    // ソース変更時
+    // ［ソース変更時］
 
 
     /// <summary>
@@ -110,7 +110,7 @@ public class ComponentVariable<S, R>
     }
 
 
-    public void SetResultFromSource(
+    public virtual void SetResultFromSource(
         S? source,
         Func<S?, R?> convertToResult)
     {
@@ -118,7 +118,7 @@ public class ComponentVariable<S, R>
     }
 
 
-    // リザルト変更時
+    // ［リザルト変更時］
 
 
     /// <summary>
@@ -157,7 +157,7 @@ public class ComponentVariable<S, R>
     /// 非同期版
     ///     </pre>
     /// </summary>
-    /// <param name="getCopiedSource"></param>
+    /// <param name="copyResult"></param>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedResult(
@@ -186,7 +186,7 @@ public class ComponentVariable<S, R>
     }
 
 
-    public void SetResult(
+    public virtual void SetResult(
         Func<R?> copyResult)
     {
         this.Result = copyResult();

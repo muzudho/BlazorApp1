@@ -1,0 +1,391 @@
+﻿@page "/property-changed-trigger-objectification-example"
+@using BlazorApp1.Components.Shared
+@implements IAsyncDisposable	// これでDisposeを有効化
+@rendermode InteractiveServer	// ボタンの @onclick に必要
+@inject NavigationManager NavigationMgr
+
+<PageTitle>プロパティ変更トリガー</PageTitle>
+
+<h1>プロパティ変更トリガー</h1>
+
+クエリーパラメーター：<br/>
+<table>
+	<th>
+		<td>名前</td>
+		<td>値</td>
+	</th>
+	<tr>
+		<td>アップル</td>
+		<td>@this.Apple</td>
+	</tr>
+	<tr>
+		<td>バナナ</td>
+		<td>@this.Banana</td>
+	</tr>
+	<tr>
+		<td>チェリー</td>
+		<td>@this.Cherry</td>
+	</tr>
+</table>
+
+ＧＵＩサンプル：
+<table>
+	<th>
+		<td>名前</td>
+		<td>値</td>
+	</th>
+	<tr>
+		<td>アップル</td>
+		<td><InputText @bind-Value="this.WorkApple" placeholder="ここに打て（＾～＾）" /></td>
+	</tr>
+	<tr>
+		<td>バナナ</td>
+		<td><InputText @bind-Value="this.WorkBanana" placeholder="ここに打て（＾～＾）" /></td>
+	</tr>
+	<tr>
+		<td>チェリー</td>
+		<td><InputText @bind-Value="this.WorkCherry" placeholder="ここに打て（＾～＾）" /></td>
+	</tr>
+</table>
+
+<ul>
+	<li><a href="https://localhost:7249/property-changed-trigger-example">https://localhost:7249/property-changed-trigger-example</a></li>
+	<li><a href="https://localhost:7249/property-changed-trigger-example?apple=&banana=&cherry=">https://localhost:7249/property-changed-trigger-example?apple=&banana=&cherry=</a></li>
+	<li><a href="https://localhost:7249/property-changed-trigger-example?apple=APPLE&banana=BANANA&cherry=CHERRY">https://localhost:7249/property-changed-trigger-example?apple=APPLE&banana=BANANA&cherry=CHERRY</a></li>
+</ul>
+
+<button @onclick="this.NavigateToSamePage">自分のページへ飛ぶ</button><br/>
+
+<p>パラメーターズセット回数： @this.ParametersSetCount</p>
+<p>レンダー回数： @this.RenderingCount</p>
+<p>重い処理の回数： @this.HeavylyProcessCount</p>
+
+<ExBananaComponent Title="GUI一時値"
+				   Apple="@this.WorkApple"
+				   Banana="@this.WorkBanana"
+				   Cherry="@this.WorkCherry" />
+
+<button @onclick="this.SearchDammy">検索（ダミー）</button>
+<br />
+
+<ExAppleComponent Title="表示値"
+				   Apple="@this.ResultApple"
+				   Banana="@this.ResultBanana"
+				   Cherry="@this.ResultCherry" />
+<br />
+
+<ExBananaComponent Title="表示値別例"
+				  Apple="@this.ResultApple"
+				  Banana="@this.ResultBanana"
+				  Cherry="@this.ResultCherry" />
+
+@code
+{
+
+
+	// ========================================
+	// パラメーター
+	// ========================================
+	//
+	//      - ［クエリーパラメーター」、［ＸＭＬタグ・パラメーター］は、（ヌルを入れることができてしまうことから）ヌル許容型にしてください。
+	//		- クエリーパラメーター（URLの引数）は string? 型で受け取ってください。
+	//		- 値の初期化は `OnAfterRenderAsync()` 関数で行ってください。 `OnParametersSetAsync()` は取り扱いが難しいです。
+	//		- データベースからの読込など重い処理は、`OnAfterRenderAsync()` 関数では行わず、バックグラウンド・スレッドで行ってください。
+
+
+	// アップル
+
+
+	/// <summary>
+	///		<pre>
+	///	アップル
+	///	
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列／パース失敗］時： "Ringo"
+	///		</pre>
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Apple")]
+	public string? Apple { get; set; }						// ［クエリーパラメーター］がそのまま格納されます。
+	private string? _lastApple;								// 変更前のパラメーターをそのまま格納してください。
+	private string WorkApple { get; set; } = "Ringo";		// コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+	private string ResultApple { get; set; } = "Ringo";		// 確定値です。画面の表示は、この値を元にします。
+	private string _lastResultApple = "Ringo";				// 変更前の確定値を格納してください。
+
+
+	// バナナ
+
+
+	/// <summary>
+	///		<pre>
+	///	バナナ
+	///
+	///		- ［期待］string 型
+	///		- ［ヌル／空文字列／パース失敗］時： "Basho"
+	///		</pre>
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Banana")]
+	public string? Banana { get; set; }
+	private string? _lastBanana;
+	private string WorkBanana { get; set; } = "Basho";
+	private string ResultBanana { get; set; } = "Basho";
+	private string _lastResultBanana = "Basho";
+
+
+	// チェリー
+
+
+	/// <summary>
+	/// チェリー
+	/// 
+	///		- ［期待］string 型、ヌル許容
+	///		- ［ヌル／空文字列／パース失敗］時： null
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "Cherry")]
+	public string? Cherry { get; set; }
+	private string? _lastCherry;
+	private string? WorkCherry { get; set; }
+	private string? ResultCherry { get; set; }
+	private string? _lastResultCherry;
+
+
+	// ========================================
+	// プロパティ
+	// ========================================
+
+
+	/// <summary>
+	///		<pre>
+	///	パラメーターズセット回数
+	///		</pre>
+	/// </summary>
+	private int ParametersSetCount = 0;
+
+	/// <summary>
+	///		<pre>
+	///	レンダー回数
+	///		</pre>
+	/// </summary>
+	private int RenderingCount = 0;
+
+	/// <summary>
+	///		<pre>
+	///	重い処理の回数
+	///		</pre>
+	/// </summary>
+	private int HeavylyProcessCount = 0;
+
+
+	// ========================================
+	// ライフサイクルメソッド
+	// ========================================
+
+
+	public async ValueTask DisposeAsync()
+	{
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＤisposeAsync]　■■■■■　破棄: DisposeAsync 呼ばれたぜ！");
+	}
+
+
+	/// <summary>
+	///		<pre>
+	///	対応する URL にアクセスされ、このページのインスタンスが生成されたときに呼び出されます。
+	///	
+	///		- 同じページに再アクセスしたとき、このメソッドは呼び出されるが、そのとき、このページのインスタンスのプロパティは初期値に戻っている。しかし、レンダーすると、前の値が残っている。仕組みがさっぱり分からない。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnInitialized]　■■■■■　ページ・インスタンス生成");
+	}
+
+
+	/// <summary>
+	///		<pre>
+	/// パラメーターセット時
+	/// 
+	///		- ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の更新時に（レンダーの一部として）呼び出されます。
+	///		</pre>
+	/// </summary>
+	/// <returns></returns>
+	protected override async Task OnParametersSetAsync()
+	{
+		await base.OnParametersSetAsync();
+
+		this.ParametersSetCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　◆１１◆　パラメーターズセット　{this.ParametersSetCount}回目");
+
+		// ここで何か処理をすると、ログに［サーバーサイド・レンダリング］と［クライアントサイド・レンダリング］の２つが被って出力されて、ログが見にくくなることに注意してください。
+
+
+		// パラメーター変更検知
+
+
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastBanana}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastCherry}");
+
+
+		// アップル
+
+
+		if (string.IsNullOrWhiteSpace(this.Apple))
+		{
+			this.Apple = "Ringo";
+		}
+
+		if (this._lastApple != this.Apple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastApple}→{this.Apple}）");
+			this._lastApple = this.Apple;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
+			this.ResultApple = this.WorkApple = this.Apple;
+		}
+
+
+		// バナナ
+
+
+		if (string.IsNullOrWhiteSpace(this.Banana))
+		{
+			this.Banana = "Basho";
+		}
+
+		if (this._lastBanana != this.Banana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastBanana}→{this.Banana}）");
+			this._lastBanana = this.Banana;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
+			this.ResultBanana = this.WorkBanana = this.Banana;
+		}
+
+
+		// チェリー
+
+
+		if (string.IsNullOrWhiteSpace(this.Cherry))
+		{
+			this.Cherry = null;
+		}
+
+		if (this._lastCherry != this.Cherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastCherry}→{this.Cherry}）");
+			this._lastCherry = this.Cherry;
+			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
+			this.ResultCherry = this.WorkCherry = this.Cherry;
+		}
+	}
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await base.OnAfterRenderAsync(firstRender);
+
+		this.RenderingCount++;
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　◆２２◆　描画後　{this.RenderingCount}回目　（firstRender = {firstRender}）");
+
+
+		// ［パラメーター変更検知］から［バックグラウンド・スレッド処理］まで
+
+
+		// アップル
+
+
+		if (this._lastResultApple != this.ResultApple)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{this._lastResultApple}→{this.ResultApple}）");
+			this._lastResultApple = this.ResultApple;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// バナナ
+
+
+		if (this._lastResultBanana != this.ResultBanana)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{this._lastResultBanana}→{this.ResultBanana}）");
+			this._lastResultBanana = this.ResultBanana;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// チェリー
+
+
+		if (this._lastResultCherry != this.ResultCherry)
+		{
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{this._lastResultCherry}→{this.ResultCherry}）");
+			this._lastResultCherry = this.ResultCherry;
+
+			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+			{
+				await Task.Delay(3 * 1000); // 何か重い処理
+				this.HeavylyProcessCount++;
+
+				// 終わったら
+				await this.InvokeAsync(this.StateHasChanged);
+			});
+		}
+
+
+		// おわりに
+
+
+		if (firstRender)
+		{
+			// ここで何か更新。
+			await this.InvokeAsync(this.StateHasChanged);   // `OnAfterRenderAsync()` 内で何か更新したら、もう１回レンダーが必須。
+			return;
+		}
+	}
+
+
+	// ========================================
+	// イベントハンドラ
+	// ========================================
+
+
+	/// <summary>
+	/// ［検索］ダミーボタン
+	/// </summary>
+	private void SearchDammy()
+	{
+		System.Console.WriteLine("[{DateTime.Now}][ＰropertyChangedExample.razor > ＳearchDammy]　🔥　検索ダミーボタン");
+
+		this.ResultApple = this.WorkApple;
+		this.ResultBanana = this.WorkBanana;
+		this.ResultCherry = this.WorkCherry;
+	}
+
+
+	private void NavigateToSamePage()
+	{
+		System.Console.WriteLine("[{DateTime.Now}][ＰropertyChangedExample.razor > ＮavigateToSamePage]　🔥　このページにまた飛ぶ");
+		this.NavigationMgr.NavigateTo("https://localhost:7249/");
+	}
+}

@@ -237,7 +237,7 @@
 					if (string.IsNullOrWhiteSpace(newValue))
 					{
 						this.AppleVar.SetResult(
-							copyResult: () => "Ringo");
+							copyResult: () => this.AppleVar.Default);
 						System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が（ヌル、ホワイトスペース）に変更されたので、既定値で上書きしました。　（W {this.AppleVar.Work}／R {this.AppleVar.Result}）");
 					}
 				}
@@ -259,7 +259,7 @@
 					if (string.IsNullOrWhiteSpace(newValue))
 					{
 						this.BananaVar.SetResult(
-							copyResult: () => "Basho");
+							copyResult: () => this.BananaVar.Default);
 						System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が（ヌル、ホワイトスペース）に変更されたので、既定値で上書きしました。　（W {this.BananaVar.Work}／R {this.BananaVar.Result}）");
 					}
 				}
@@ -279,7 +279,7 @@
 					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{oldValue}→{newValue}）");
 				}
 
-				// ヌルで上書きされてもそのまま。
+				// （ヌル、ホワイトスペース）で上書きされてもそのまま。
 			});
 	}
 

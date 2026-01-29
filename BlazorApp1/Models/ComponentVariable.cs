@@ -16,6 +16,8 @@ public class ComponentVariable<S, R>
     public S? LastSource => this._lastSource;
     protected S? _lastSource;
 
+    public R? Default { get; set; }
+
     public R? Result { get; set; }
 
     public R? LastResult => this._lastResult;
@@ -29,6 +31,7 @@ public class ComponentVariable<S, R>
 
     public ComponentVariable(R? result)
     {
+        this.Default = result;
         this.Result = result;
     }
 

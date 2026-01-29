@@ -13,10 +13,12 @@ public class ComponentVariable<S, R>
 
     public S? Source { get; set; }
 
+    public S? LastSource => this._lastSource;
     protected S? _lastSource;
 
     public R? Result { get; set; }
 
+    public R? LastResult => this._lastResult;
     protected R? _lastResult;
 
 
@@ -51,25 +53,26 @@ public class ComponentVariable<S, R>
     public void ApplyChangedSource(
         Func<S?> copySource,
         Func<S?, R?> convertToResult,
-        Action<S?>? onChanged,
-        Action? onUnchanged)
+        Action<S?, S?>? onChanged = null,
+        Action? onUnchanged = null)
     {
-        var copiedSource = copySource();
+        var newValue = copySource();
 
         // a == b
-        if (EqualityComparer<S?>.Default.Equals(this._lastSource, copiedSource))
+        if (EqualityComparer<S?>.Default.Equals(this._lastSource, newValue))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastSource = copiedSource;
+        var oldValue = this._lastSource;
+        this._lastSource = newValue;
         this.SetResultFromSource(
-            source: copiedSource,
+            source: newValue,
             convertToResult: convertToResult);
 
-        onChanged?.Invoke(copySource());
+        onChanged?.Invoke(oldValue, newValue);
     }
 
 
@@ -84,28 +87,29 @@ public class ComponentVariable<S, R>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedSource(
         Func<S?> copySource,
-        Func<S?, R?> convertToResult,
-        Func<S?, Task>? onChanged,
-        Func<Task>? onUnchanged)
+        Func<S?, Task<R?>> convertToResult,
+        Func<S?, S?, Task>? onChanged = null,
+        Func<Task>? onUnchanged = null)
     {
-        var copiedSource = copySource();
+        var newValue = copySource();
 
         // a == b
-        if (EqualityComparer<S?>.Default.Equals(this._lastSource, copiedSource))
+        if (EqualityComparer<S?>.Default.Equals(this._lastSource, newValue))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastSource = copiedSource;
-        this.SetResultFromSource(
-            source: copiedSource,
+        var oldValue = this._lastSource;
+        this._lastSource = newValue;
+        await this.SetResultFromSource(
+            source: newValue,
             convertToResult: convertToResult);
 
         if (onChanged != null)
         {
-            await onChanged(copySource());
+            await onChanged(oldValue, newValue);
         }
     }
 
@@ -115,6 +119,14 @@ public class ComponentVariable<S, R>
         Func<S?, R?> convertToResult)
     {
         this.Result = convertToResult(source);
+    }
+
+
+    public virtual async Task SetResultFromSource(
+        S? source,
+        Func<S?, Task<R?>> convertToResult)
+    {
+        this.Result = await convertToResult(source);
     }
 
 
@@ -131,24 +143,25 @@ public class ComponentVariable<S, R>
     /// <param name="onUnchanged"></param>
     public void ApplyChangedResult(
         Func<R?> copyResult,
-        Action<R?>? onChanged,
-        Action? onUnchanged)
+        Action<R?, R?>? onChanged = null,
+        Action? onUnchanged = null)
     {
-        var copiedResult = copyResult();
+        var newResult = copyResult();
 
         // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, copiedResult))
+        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newResult))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastResult = copiedResult;
+        var oldResult = this._lastResult;
+        this._lastResult = newResult;
         this.SetResult(
             copyResult: copyResult);
 
-        onChanged?.Invoke(copyResult());
+        onChanged?.Invoke(oldResult, newResult);
     }
 
 
@@ -161,27 +174,28 @@ public class ComponentVariable<S, R>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedResult(
-        Func<R?> copyResult,
-        Func<R?, Task>? onChanged,
-        Func<Task>? onUnchanged)
+        Func<Task<R?>> copyResult,
+        Func<R?, R?, Task>? onChanged = null,
+        Func<Task>? onUnchanged = null)
     {
-        var copiedResult = copyResult();
+        var newResult = await copyResult();
 
         // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, copiedResult))
+        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newResult))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastResult = copiedResult;
-        this.SetResult(
+        var oldResult = this._lastResult;
+        this._lastResult = newResult;
+        await this.SetResult(
             copyResult: copyResult);
 
         if (onChanged != null)
         {
-            await onChanged(copyResult());
+            await onChanged(oldResult, newResult);
         }
     }
 
@@ -190,5 +204,12 @@ public class ComponentVariable<S, R>
         Func<R?> copyResult)
     {
         this.Result = copyResult();
+    }
+
+
+    public virtual async Task SetResult(
+        Func<Task<R?>> copyResult)
+    {
+        this.Result = await copyResult();
     }
 }

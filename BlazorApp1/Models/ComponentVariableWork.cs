@@ -19,6 +19,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 
     public ComponentVariableWork(R? result) : base(result)
     {
+        this.Work = result;
     }
 
 
@@ -51,24 +52,25 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="onUnchanged"></param>
     public void ApplyChangedWork(
         Func<R?> copyWork,
-        Action<R?>? onChanged,
-        Action? onUnchanged)
+        Action<R?, R?>? onChanged = null,
+        Action? onUnchanged = null)
     {
-        var copiedWork = copyWork();
+        var newValue = copyWork();
 
         // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, copiedWork))
+        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastResult = copiedWork;
+        var oldValue = this._lastResult;
+        this._lastResult = newValue;
         this.SetWork(
             copyWork: copyWork);
 
-        onChanged?.Invoke(copyWork());
+        onChanged?.Invoke(oldValue, newValue);
     }
 
 
@@ -81,27 +83,28 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedWork(
-        Func<R?> copyWork,
-        Func<R?, Task>? onChanged,
-        Func<Task>? onUnchanged)
+        Func<Task<R?>> copyWork,
+        Func<R?, R?, Task>? onChanged = null,
+        Func<Task>? onUnchanged = null)
     {
-        var copiedWork = copyWork();
+        var newValue = await copyWork();
 
         // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, copiedWork))
+        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
         {
             onUnchanged?.Invoke();
             return;
         }
 
         // a != b
-        this._lastResult = copiedWork;
-        this.SetWork(
+        var oldValue = this._lastResult;
+        this._lastResult = newValue;
+        await this.SetWork(
             copyWork: copyWork);
 
         if (onChanged != null)
         {
-            await onChanged(copyWork());
+            await onChanged(oldValue, newValue);
         }
     }
 
@@ -111,6 +114,14 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     {
         this.Work = copyWork();         // コピー渡し
         this.Result = copyWork();       // コピー渡し
+    }
+
+
+    public virtual async Task SetWork(
+        Func<Task<R?>> copyWork)
+    {
+        this.Work = await copyWork();         // コピー渡し
+        this.Result = await copyWork();       // コピー渡し
     }
 
 

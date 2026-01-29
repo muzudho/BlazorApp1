@@ -1,5 +1,6 @@
 ﻿@page "/property-changed-trigger-objectification-example"
 @using BlazorApp1.Components.Shared
+@using BlazorApp1.Models
 @implements IAsyncDisposable	// これでDisposeを有効化
 @rendermode InteractiveServer	// ボタンの @onclick に必要
 @inject NavigationManager NavigationMgr
@@ -36,7 +37,7 @@
 	</th>
 	<tr>
 		<td>アップル</td>
-		<td><InputText @bind-Value="this.WorkApple" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.AppleVar.Work" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
 		<td>バナナ</td>
@@ -61,7 +62,7 @@
 <p>重い処理の回数： @this.HeavylyProcessCount</p>
 
 <ExBananaComponent Title="GUI一時値"
-				   Apple="@this.WorkApple"
+				   Apple="@this.AppleVar.Work"
 				   Banana="@this.WorkBanana"
 				   Cherry="@this.WorkCherry" />
 
@@ -69,13 +70,13 @@
 <br />
 
 <ExAppleComponent Title="表示値"
-				   Apple="@this.ResultApple"
+				   Apple="@this.AppleVar.Result"
 				   Banana="@this.ResultBanana"
 				   Cherry="@this.ResultCherry" />
 <br />
 
 <ExBananaComponent Title="表示値別例"
-				  Apple="@this.ResultApple"
+				  Apple="@this.AppleVar.Result"
 				  Banana="@this.ResultBanana"
 				  Cherry="@this.ResultCherry" />
 
@@ -106,11 +107,8 @@
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
-	public string? Apple { get; set; }						// ［クエリーパラメーター］がそのまま格納されます。
-	private string? _lastApple;								// 変更前のパラメーターをそのまま格納してください。
-	private string WorkApple { get; set; } = "Ringo";		// コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
-	private string ResultApple { get; set; } = "Ringo";		// 確定値です。画面の表示は、この値を元にします。
-	private string _lastResultApple = "Ringo";				// 変更前の確定値を格納してください。
+	public string? Apple { get; set; }                                  // ［クエリーパラメーター］がそのまま格納されます。
+	public ComponentVariableWork<string?, string?> AppleVar { get; set; } = new("Ringo");
 
 
 	// バナナ
@@ -225,7 +223,7 @@
 		// パラメーター変更検知
 
 
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this.AppleVar.LastSource}");
 		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastBanana}");
 		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastCherry}");
 
@@ -238,13 +236,9 @@
 			this.Apple = "Ringo";
 		}
 
-		if (this._lastApple != this.Apple)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastApple}→{this.Apple}）");
-			this._lastApple = this.Apple;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.ResultApple = this.WorkApple = this.Apple;
-		}
+		this.AppleVar.ApplyChangedSource(
+			copySource: () => this.Apple,
+			convertToResult: (source) => source);
 
 
 		// バナナ
@@ -296,21 +290,22 @@
 		// アップル
 
 
-		if (this._lastResultApple != this.ResultApple)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{this._lastResultApple}→{this.ResultApple}）");
-			this._lastResultApple = this.ResultApple;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+		this.AppleVar.ApplyChangedResult(
+			copyResult: () => this.AppleVar.Result,
+			onChanged: (oldValue, newValue) =>
 			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{oldValue}→{newValue}）");
 
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
+				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				{
+					await Task.Delay(3 * 1000); // 何か重い処理
+					this.HeavylyProcessCount++;
+
+					// 終わったら
+					await this.InvokeAsync(this.StateHasChanged);
+				});
 			});
-		}
 
 
 		// バナナ
@@ -377,7 +372,8 @@
 	{
 		System.Console.WriteLine("[{DateTime.Now}][ＰropertyChangedExample.razor > ＳearchDammy]　🔥　検索ダミーボタン");
 
-		this.ResultApple = this.WorkApple;
+		this.AppleVar.ApplyChangedWork(
+			copyWork: () => this.AppleVar.Work);
 		this.ResultBanana = this.WorkBanana;
 		this.ResultCherry = this.WorkCherry;
 	}

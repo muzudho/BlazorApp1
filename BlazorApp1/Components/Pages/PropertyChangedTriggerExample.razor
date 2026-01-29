@@ -16,15 +16,15 @@
 	</th>
 	<tr>
 		<td>アップル</td>
-		<td>@this.UrlApple</td>
+		<td>@this.Apple</td>
 	</tr>
 	<tr>
 		<td>バナナ</td>
-		<td>@this.UrlBanana</td>
+		<td>@this.Banana</td>
 	</tr>
 	<tr>
 		<td>チェリー</td>
-		<td>@this.UrlCherry</td>
+		<td>@this.Cherry</td>
 	</tr>
 </table>
 
@@ -36,15 +36,15 @@
 	</th>
 	<tr>
 		<td>アップル</td>
-		<td><InputText @bind-Value="this.GuiApple" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.WorkApple" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
 		<td>バナナ</td>
-		<td><InputText @bind-Value="this.GuiBanana" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.WorkBanana" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
 		<td>チェリー</td>
-		<td><InputText @bind-Value="this.GuiCherry" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.WorkCherry" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 </table>
 
@@ -61,23 +61,23 @@
 <p>重い処理の回数： @this.HeavylyProcessCount</p>
 
 <ExBananaComponent Title="GUI一時値"
-				   Apple="@this.GuiApple"
-				   Banana="@this.GuiBanana"
-				   Cherry="@this.GuiCherry" />
+				   Apple="@this.WorkApple"
+				   Banana="@this.WorkBanana"
+				   Cherry="@this.WorkCherry" />
 
 <button @onclick="this.SearchDammy">検索（ダミー）</button>
 <br />
 
 <ExAppleComponent Title="表示値"
-				   Apple="@this.DisplayedApple"
-				   Banana="@this.DisplayedBanana"
-				   Cherry="@this.DisplayedCherry" />
+				   Apple="@this.ResultApple"
+				   Banana="@this.ResultBanana"
+				   Cherry="@this.ResultCherry" />
 <br />
 
 <ExBananaComponent Title="表示値別例"
-				  Apple="@this.DisplayedApple"
-				  Banana="@this.DisplayedBanana"
-				  Cherry="@this.DisplayedCherry" />
+				  Apple="@this.ResultApple"
+				  Banana="@this.ResultBanana"
+				  Cherry="@this.ResultCherry" />
 
 @code
 {
@@ -106,11 +106,11 @@
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
-	public string? UrlApple { get; set; }					// ［クエリーパラメーター］がそのまま格納されます。
-	private string? _lastUrlApple;							// 変更前のパラメーターをそのまま格納してください。
-	private string GuiApple { get; set; } = "Ringo";        // コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
-	private string DisplayedApple { get; set; } = "Ringo";  // 確定値です。画面の表示は、この値を元にします。
-	private string _lastDisplayedApple = "Ringo";			// 変更前の確定値を格納してください。
+	public string? Apple { get; set; }						// ［クエリーパラメーター］がそのまま格納されます。
+	private string? _lastApple;								// 変更前のパラメーターをそのまま格納してください。
+	private string WorkApple { get; set; } = "Ringo";		// コントロールが保持する値です。例えば、検索フォームなどで、確定ボタン等を押すまで仮の値である場合がこれです。
+	private string ResultApple { get; set; } = "Ringo";		// 確定値です。画面の表示は、この値を元にします。
+	private string _lastResultApple = "Ringo";				// 変更前の確定値を格納してください。
 
 
 	// バナナ
@@ -126,11 +126,11 @@
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
-	public string? UrlBanana { get; set; }
-	private string? _lastUrlBanana;
-	private string GuiBanana { get; set; } = "Basho";
-	private string DisplayedBanana { get; set; } = "Basho";
-	private string _lastDisplayedBanana = "Basho";
+	public string? Banana { get; set; }
+	private string? _lastBanana;
+	private string WorkBanana { get; set; } = "Basho";
+	private string ResultBanana { get; set; } = "Basho";
+	private string _lastResultBanana = "Basho";
 
 
 	// チェリー
@@ -144,11 +144,11 @@
 	/// </summary>
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
-	public string? UrlCherry { get; set; }
-	private string? _lastUrlCherry;
-	private string? GuiCherry { get; set; }
-	private string? DisplayedCherry { get; set; }
-	private string? _lastDisplayedCherry;
+	public string? Cherry { get; set; }
+	private string? _lastCherry;
+	private string? WorkCherry { get; set; }
+	private string? ResultCherry { get; set; }
+	private string? _lastResultCherry;
 
 
 	// ========================================
@@ -225,59 +225,59 @@
 		// パラメーター変更検知
 
 
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastUrlApple}");
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastUrlBanana}");
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastUrlCherry}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this._lastApple}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastBanana}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastCherry}");
 
 
 		// アップル
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlApple))
+		if (string.IsNullOrWhiteSpace(this.Apple))
 		{
-			this.UrlApple = "Ringo";
+			this.Apple = "Ringo";
 		}
 
-		if (this._lastUrlApple != this.UrlApple)
+		if (this._lastApple != this.Apple)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastUrlApple}→{this.UrlApple}）");
-			this._lastUrlApple = this.UrlApple;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{this._lastApple}→{this.Apple}）");
+			this._lastApple = this.Apple;
 			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.DisplayedApple = this.GuiApple = this.UrlApple;
+			this.ResultApple = this.WorkApple = this.Apple;
 		}
 
 
 		// バナナ
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlBanana))
+		if (string.IsNullOrWhiteSpace(this.Banana))
 		{
-			this.UrlBanana = "Basho";
+			this.Banana = "Basho";
 		}
 
-		if (this._lastUrlBanana != this.UrlBanana)
+		if (this._lastBanana != this.Banana)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastUrlBanana}→{this.UrlBanana}）");
-			this._lastUrlBanana = this.UrlBanana;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastBanana}→{this.Banana}）");
+			this._lastBanana = this.Banana;
 			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.DisplayedBanana = this.GuiBanana = this.UrlBanana;
+			this.ResultBanana = this.WorkBanana = this.Banana;
 		}
 
 
 		// チェリー
 
 
-		if (string.IsNullOrWhiteSpace(this.UrlCherry))
+		if (string.IsNullOrWhiteSpace(this.Cherry))
 		{
-			this.UrlCherry = null;
+			this.Cherry = null;
 		}
 
-		if (this._lastUrlCherry != this.UrlCherry)
+		if (this._lastCherry != this.Cherry)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastUrlCherry}→{this.UrlCherry}）");
-			this._lastUrlCherry = this.UrlCherry;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastCherry}→{this.Cherry}）");
+			this._lastCherry = this.Cherry;
 			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.DisplayedCherry = this.GuiCherry = this.UrlCherry;
+			this.ResultCherry = this.WorkCherry = this.Cherry;
 		}
 	}
 
@@ -296,10 +296,10 @@
 		// アップル
 
 
-		if (this._lastDisplayedApple != this.DisplayedApple)
+		if (this._lastResultApple != this.ResultApple)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{this._lastDisplayedApple}→{this.DisplayedApple}）");
-			this._lastDisplayedApple = this.DisplayedApple;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{this._lastResultApple}→{this.ResultApple}）");
+			this._lastResultApple = this.ResultApple;
 
 			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
 			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
@@ -316,10 +316,10 @@
 		// バナナ
 
 
-		if (this._lastDisplayedBanana != this.DisplayedBanana)
+		if (this._lastResultBanana != this.ResultBanana)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{this._lastDisplayedBanana}→{this.DisplayedBanana}）");
-			this._lastDisplayedBanana = this.DisplayedBanana;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{this._lastResultBanana}→{this.ResultBanana}）");
+			this._lastResultBanana = this.ResultBanana;
 
 			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
 			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
@@ -336,10 +336,10 @@
 		// チェリー
 
 
-		if (this._lastDisplayedCherry != this.DisplayedCherry)
+		if (this._lastResultCherry != this.ResultCherry)
 		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{this._lastDisplayedCherry}→{this.DisplayedCherry}）");
-			this._lastDisplayedCherry = this.DisplayedCherry;
+			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{this._lastResultCherry}→{this.ResultCherry}）");
+			this._lastResultCherry = this.ResultCherry;
 
 			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
 			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
@@ -377,9 +377,9 @@
 	{
 		System.Console.WriteLine("[{DateTime.Now}][ＰropertyChangedExample.razor > ＳearchDammy]　🔥　検索ダミーボタン");
 
-		this.DisplayedApple = this.GuiApple;
-		this.DisplayedBanana = this.GuiBanana;
-		this.DisplayedCherry = this.GuiCherry;
+		this.ResultApple = this.WorkApple;
+		this.ResultBanana = this.WorkBanana;
+		this.ResultCherry = this.WorkCherry;
 	}
 
 

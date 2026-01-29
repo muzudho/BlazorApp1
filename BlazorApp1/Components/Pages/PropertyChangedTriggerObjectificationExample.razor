@@ -41,11 +41,11 @@
 	</tr>
 	<tr>
 		<td>バナナ</td>
-		<td><InputText @bind-Value="this.WorkBanana" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.BananaVar.Work" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 	<tr>
 		<td>チェリー</td>
-		<td><InputText @bind-Value="this.WorkCherry" placeholder="ここに打て（＾～＾）" /></td>
+		<td><InputText @bind-Value="this.CherryVar.Work" placeholder="ここに打て（＾～＾）" /></td>
 	</tr>
 </table>
 
@@ -63,22 +63,22 @@
 
 <ExBananaComponent Title="GUI一時値"
 				   Apple="@this.AppleVar.Work"
-				   Banana="@this.WorkBanana"
-				   Cherry="@this.WorkCherry" />
+				   Banana="@this.BananaVar.Work"
+				   Cherry="@this.CherryVar.Work" />
 
 <button @onclick="this.SearchDammy">検索（ダミー）</button>
 <br />
 
 <ExAppleComponent Title="表示値"
 				   Apple="@this.AppleVar.Result"
-				   Banana="@this.ResultBanana"
-				   Cherry="@this.ResultCherry" />
+				   Banana="@this.BananaVar.Result"
+				   Cherry="@this.CherryVar.Result" />
 <br />
 
 <ExBananaComponent Title="表示値別例"
 				  Apple="@this.AppleVar.Result"
-				  Banana="@this.ResultBanana"
-				  Cherry="@this.ResultCherry" />
+				  Banana="@this.BananaVar.Result"
+				  Cherry="@this.CherryVar.Result" />
 
 @code
 {
@@ -125,10 +125,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? Banana { get; set; }
-	private string? _lastBanana;
-	private string WorkBanana { get; set; } = "Basho";
-	private string ResultBanana { get; set; } = "Basho";
-	private string _lastResultBanana = "Basho";
+	public ComponentVariableWork<string?, string?> BananaVar { get; set; } = new("Basho");
 
 
 	// チェリー
@@ -143,10 +140,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
 	public string? Cherry { get; set; }
-	private string? _lastCherry;
-	private string? WorkCherry { get; set; }
-	private string? ResultCherry { get; set; }
-	private string? _lastResultCherry;
+	public ComponentVariableWork<string?, string?> CherryVar { get; set; } = new(default);
 
 
 	// ========================================
@@ -224,8 +218,8 @@
 
 
 		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>アップル］：{this.AppleVar.LastSource}");
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this._lastBanana}");
-		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this._lastCherry}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>バナナ］：{this.BananaVar.LastSource}");
+		System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　前回の値［URL>チェリー］：{this.CherryVar.LastSource}");
 
 
 		// アップル
@@ -238,7 +232,11 @@
 
 		this.AppleVar.ApplyChangedSource(
 			copySource: () => this.Apple,
-			convertToResult: (source) => source);
+			convertToResult: (source) => source,
+			onChanged: (oldValue, newValue) =>
+			{
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{oldValue}→{newValue}）");
+			});
 
 
 		// バナナ
@@ -249,13 +247,13 @@
 			this.Banana = "Basho";
 		}
 
-		if (this._lastBanana != this.Banana)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{this._lastBanana}→{this.Banana}）");
-			this._lastBanana = this.Banana;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.ResultBanana = this.WorkBanana = this.Banana;
-		}
+		this.BananaVar.ApplyChangedSource(
+			copySource: () => this.Banana,
+			convertToResult: (source) => source,
+			onChanged: (oldValue, newValue) =>
+			{
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{oldValue}→{newValue}）");
+			});
 
 
 		// チェリー
@@ -266,13 +264,13 @@
 			this.Cherry = null;
 		}
 
-		if (this._lastCherry != this.Cherry)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{this._lastCherry}→{this.Cherry}）");
-			this._lastCherry = this.Cherry;
-			// ［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］の変更は［GUI］［ディスプレイ］へ一気通貫で反映
-			this.ResultCherry = this.WorkCherry = this.Cherry;
-		}
+		this.CherryVar.ApplyChangedSource(
+			copySource: () => this.Cherry,
+			convertToResult: (source) => source,
+			onChanged: (oldValue, newValue) =>
+			{
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{oldValue}→{newValue}）");
+			});
 	}
 
 
@@ -311,41 +309,43 @@
 		// バナナ
 
 
-		if (this._lastResultBanana != this.ResultBanana)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{this._lastResultBanana}→{this.ResultBanana}）");
-			this._lastResultBanana = this.ResultBanana;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+		this.BananaVar.ApplyChangedResult(
+			copyResult: () => this.BananaVar.Result,
+			onChanged: (oldValue, newValue) =>
 			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{oldValue}→{newValue}）");
 
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
+				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				{
+					await Task.Delay(3 * 1000); // 何か重い処理
+					this.HeavylyProcessCount++;
+
+					// 終わったら
+					await this.InvokeAsync(this.StateHasChanged);
+				});
 			});
-		}
 
 
 		// チェリー
 
 
-		if (this._lastResultCherry != this.ResultCherry)
-		{
-			System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{this._lastResultCherry}→{this.ResultCherry}）");
-			this._lastResultCherry = this.ResultCherry;
-
-			// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-			_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+		this.CherryVar.ApplyChangedResult(
+			copyResult: ()=> this.CherryVar.Result,
+			onChanged: (oldValue, newValue) =>
 			{
-				await Task.Delay(3 * 1000); // 何か重い処理
-				this.HeavylyProcessCount++;
+				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{oldValue}→{newValue}）");
 
-				// 終わったら
-				await this.InvokeAsync(this.StateHasChanged);
+				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				{
+					await Task.Delay(3 * 1000); // 何か重い処理
+					this.HeavylyProcessCount++;
+
+					// 終わったら
+					await this.InvokeAsync(this.StateHasChanged);
+				});
 			});
-		}
 
 
 		// おわりに
@@ -374,8 +374,10 @@
 
 		this.AppleVar.ApplyChangedWork(
 			copyWork: () => this.AppleVar.Work);
-		this.ResultBanana = this.WorkBanana;
-		this.ResultCherry = this.WorkCherry;
+		this.BananaVar.ApplyChangedWork(
+			copyWork: () => this.BananaVar.Work);
+		this.CherryVar.ApplyChangedWork(
+			copyWork: () => this.CherryVar.Work);
 	}
 
 

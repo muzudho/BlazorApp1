@@ -225,51 +225,61 @@
 		// アップル
 
 
-		if (string.IsNullOrWhiteSpace(this.Apple))
-		{
-			this.Apple = "Ringo";
-		}
-
 		this.AppleVar.ApplyChangedSource(
 			copySource: () => this.Apple,
 			convertToResult: (source) => source,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{oldValue}→{newValue}）");
+				if (oldValue != newValue)
+				{
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が変更されました。　（{oldValue}→{newValue}）");
+
+					if (string.IsNullOrWhiteSpace(newValue))
+					{
+						this.AppleVar.SetResult(
+							copyResult: () => "Ringo");
+						System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>アップル］が（ヌル、ホワイトスペース）に変更されたので、既定値で上書きしました。　（W {this.AppleVar.Work}／R {this.AppleVar.Result}）");
+					}
+				}
 			});
 
 
 		// バナナ
 
 
-		if (string.IsNullOrWhiteSpace(this.Banana))
-		{
-			this.Banana = "Basho";
-		}
-
 		this.BananaVar.ApplyChangedSource(
 			copySource: () => this.Banana,
 			convertToResult: (source) => source,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{oldValue}→{newValue}）");
+				if (oldValue != newValue)
+				{
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が変更されました。　（{oldValue}→{newValue}）");
+
+					if (string.IsNullOrWhiteSpace(newValue))
+					{
+						this.BananaVar.SetResult(
+							copyResult: () => "Basho");
+						System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>バナナ］が（ヌル、ホワイトスペース）に変更されたので、既定値で上書きしました。　（W {this.BananaVar.Work}／R {this.BananaVar.Result}）");
+					}
+				}
 			});
 
 
 		// チェリー
 
 
-		if (string.IsNullOrWhiteSpace(this.Cherry))
-		{
-			this.Cherry = null;
-		}
-
 		this.CherryVar.ApplyChangedSource(
 			copySource: () => this.Cherry,
 			convertToResult: (source) => source,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{oldValue}→{newValue}）");
+				if (oldValue != newValue)
+				{
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnParametersSetAsync]　［URL>チェリー］が変更されました。　（{oldValue}→{newValue}）");
+				}
+
+				// ヌルで上書きされてもそのまま。
 			});
 	}
 
@@ -290,19 +300,22 @@
 
 		this.AppleVar.ApplyChangedResult(
 			copyResult: () => this.AppleVar.Result,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{oldValue}→{newValue}）");
-
-				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				if (oldValue != newValue)
 				{
-					await Task.Delay(3 * 1000); // 何か重い処理
-					this.HeavylyProcessCount++;
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>アップル］が変更されました。　（{oldValue}→{newValue}）");
 
-					// 終わったら
-					await this.InvokeAsync(this.StateHasChanged);
-				});
+					// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+					_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+					{
+						await Task.Delay(3 * 1000); // 何か重い処理
+						this.HeavylyProcessCount++;
+
+						// 終わったら
+						await this.InvokeAsync(this.StateHasChanged);
+					});
+				}
 			});
 
 
@@ -311,19 +324,22 @@
 
 		this.BananaVar.ApplyChangedResult(
 			copyResult: () => this.BananaVar.Result,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{oldValue}→{newValue}）");
-
-				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				if (oldValue != newValue)
 				{
-					await Task.Delay(3 * 1000); // 何か重い処理
-					this.HeavylyProcessCount++;
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>バナナ］が変更されました。　（{oldValue}→{newValue}）");
 
-					// 終わったら
-					await this.InvokeAsync(this.StateHasChanged);
-				});
+					// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+					_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+					{
+						await Task.Delay(3 * 1000); // 何か重い処理
+						this.HeavylyProcessCount++;
+
+						// 終わったら
+						await this.InvokeAsync(this.StateHasChanged);
+					});					
+				}
 			});
 
 
@@ -332,19 +348,22 @@
 
 		this.CherryVar.ApplyChangedResult(
 			copyResult: ()=> this.CherryVar.Result,
-			onChanged: (oldValue, newValue) =>
+			onProcessed: (oldValue, newValue) =>
 			{
-				System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{oldValue}→{newValue}）");
-
-				// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
-				_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+				if (oldValue != newValue)
 				{
-					await Task.Delay(3 * 1000); // 何か重い処理
-					this.HeavylyProcessCount++;
+					System.Console.WriteLine($"[{DateTime.Now}][ＰropertyChangedExample.razor > ＯnAfterRenderAsync]　［Display>チェリー］が変更されました。　（{oldValue}→{newValue}）");
 
-					// 終わったら
-					await this.InvokeAsync(this.StateHasChanged);
-				});
+					// FIXME: `OnAfterRenderAsync()` の中で重い処理をしてはいけません。バックグラウンド・スレッドに投げてください。
+					_ = Task.Run(async () =>  // fire-and-forget（awaitせず次へ進みます）
+					{
+						await Task.Delay(3 * 1000); // 何か重い処理
+						this.HeavylyProcessCount++;
+
+						// 終わったら
+						await this.InvokeAsync(this.StateHasChanged);
+					});
+				}
 			});
 
 

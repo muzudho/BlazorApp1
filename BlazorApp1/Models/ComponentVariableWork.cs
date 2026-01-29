@@ -55,20 +55,16 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         Action<R?, R?>? onChanged = null,
         Action? onUnchanged = null)
     {
+        var oldValue = this._lastResult;
         var newValue = copyWork();
 
-        // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
-        {
-            onUnchanged?.Invoke();
-            return;
-        }
-
         // a != b
-        var oldValue = this._lastResult;
-        this._lastResult = newValue;
-        this.SetWork(
-            copyWork: copyWork);
+        if (!EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
+        {
+            this._lastResult = newValue;
+            this.SetResult(
+                copyResult: copyWork);
+        }
 
         onChanged?.Invoke(oldValue, newValue);
     }
@@ -87,20 +83,16 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         Func<R?, R?, Task>? onChanged = null,
         Func<Task>? onUnchanged = null)
     {
+        var oldValue = this._lastResult;
         var newValue = await copyWork();
 
-        // a == b
-        if (EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
-        {
-            onUnchanged?.Invoke();
-            return;
-        }
-
         // a != b
-        var oldValue = this._lastResult;
-        this._lastResult = newValue;
-        await this.SetWork(
-            copyWork: copyWork);
+        if (!EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
+        {
+            this._lastResult = newValue;
+            await this.SetResult(
+                copyResult: copyWork);
+        }
 
         if (onChanged != null)
         {
@@ -109,29 +101,18 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     }
 
 
-    public virtual void SetWork(
-        Func<R?> copyWork)
-    {
-        this.Work = copyWork();         // コピー渡し
-        this.Result = copyWork();       // コピー渡し
-    }
-
-
-    public virtual async Task SetWork(
-        Func<Task<R?>> copyWork)
-    {
-        this.Work = await copyWork();         // コピー渡し
-        this.Result = await copyWork();       // コピー渡し
-    }
-
-
-    // ［リザルト変更時］
-
-
     public override void SetResult(
         Func<R?> copyResult)
     {
-        this.Work = copyResult();       // コピー渡し
-        this.Result = copyResult();     // コピー渡し
+        this.Work = copyResult();         // コピー渡し
+        this.Result = copyResult();       // コピー渡し
+    }
+
+
+    public override async Task SetResult(
+        Func<Task<R?>> copyResult)
+    {
+        this.Work = await copyResult();         // コピー渡し
+        this.Result = await copyResult();       // コピー渡し
     }
 }

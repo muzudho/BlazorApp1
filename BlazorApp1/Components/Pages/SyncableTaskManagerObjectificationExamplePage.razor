@@ -94,8 +94,8 @@
 
     private async Task _WorkingAsync()
     {
-        // 5秒ごとに実行したい場合
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+        // 1秒ごとに実行したい場合
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
         // キャンセルしたいときはこれを用意（任意）
         using var ctSource = new CancellationTokenSource();

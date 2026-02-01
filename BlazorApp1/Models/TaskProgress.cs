@@ -1,5 +1,6 @@
 ﻿namespace BlazorApp1.Models;
 
+
 /// <summary>
 /// タスクの進捗
 /// </summary>
@@ -13,28 +14,37 @@ public record TaskProgress : ITaskProgress
 
 
     /// <summary>
-    /// 申請中か
+    /// 申請されているか
     /// </summary>
-    public bool IsApplying => this._isAppliying;
     private bool _isAppliying;
 
     /// <summary>
-    /// 受理したか
+    /// 受理されたか
     /// </summary>
-    public bool IsAccepted => this._isAccepted;
     private bool _isAccepted;
 
     /// <summary>
-    /// 実行中か
+    /// 執行中か
     /// </summary>
-    public bool IsUnderExecution => this._isUnderExecution;
-    private bool _isUnderExecution;
+    private bool _isItBeingExecuted;
 
     /// <summary>
-    /// 完了か
+    ///     <pre>
+    /// 受理可能か
+    /// 
+    ///     - 受理されておらず、かつ、申請されているか
+    ///     </pre>
     /// </summary>
-    public bool IsCompleted => this._isCompleted;
-    private bool _isCompleted;
+    public bool IsAcceptable => !this._isAccepted && this._isAppliying;
+
+    /// <summary>
+    ///     <pre>
+    /// 執行可能か
+    /// 
+    ///     - 執行中でなく、かつ、受理されているか
+    ///     </pre>
+    /// </summary>
+    public bool IsExecutable => !this._isItBeingExecuted && this._isAccepted;
 
 
     // ========================================
@@ -66,8 +76,8 @@ public record TaskProgress : ITaskProgress
     /// </summary>
     public void Execute()
     {
-        this._isAppliying = false;
-        this._isUnderExecution = true;
+        this._isAccepted = false;
+        this._isItBeingExecuted = true;
     }
 
 
@@ -76,7 +86,6 @@ public record TaskProgress : ITaskProgress
     /// </summary>
     public void Complete()
     {
-        this._isUnderExecution = false;
-        this._isCompleted = true;
+        this._isItBeingExecuted = false;
     }
 }

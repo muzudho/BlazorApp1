@@ -5,7 +5,7 @@
 <h3>SyncableTaskManagerExample</h3>
 
 <p>
-    連打してみてください。<br/>
+    １５秒間ぐらい連打してみてください。だいたい５秒置きに１回実行されます。<br/>
     <button @onclick="this.Perform">実行</button>
 </p>
 
@@ -108,8 +108,8 @@
                     // ここが定期的に呼ばれる部分
                     System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
 
-                    // 例: 何か重い処理をしてもOK（次のtickはズレない）
-                    // await SomeAsyncWork();
+                    // 5秒待機
+                    await Task.Delay(5 * 1000);
 
                     // TODO: 完了通知
                 }

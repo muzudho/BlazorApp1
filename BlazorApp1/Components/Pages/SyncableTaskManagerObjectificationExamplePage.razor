@@ -1,8 +1,9 @@
-﻿@page "/syncable-task-manager-example"
+﻿@page "/syncable-task-manager-objectification-example"
+@using BlazorApp1.Models
 @rendermode InteractiveServer	// ボタンの @onclick に必要
 
-<PageTitle>同期タスクマネージャーの例</PageTitle>
-<h3>SyncableTaskManagerExample</h3>
+<PageTitle>同期タスクマネージャーの例（オブジェクト化）</PageTitle>
+<h3>SyncableTaskManagerObjectificationExample</h3>
 
 <p>
     １５秒間ぐらい連打してみてください。だいたい５秒置きに１回実行されます。<br/>
@@ -13,15 +14,24 @@
 
 
     // ========================================
+    // パラメーター　＞　フック
+    // ========================================
+
+
+    [Parameter]
+    public EventCallback OnExampleCompleted { get; set; }
+
+
+    // ========================================
     // プロパティ
     // ========================================
 
 
     /// <summary>
-    /// タスクの要求
+    /// タスクの進捗
     /// </summary>
-    private bool _isStartExampleTask;
-    private bool _isAcceptedExampleTask;
+    public TaskProgress ExampleProgress => this._exampleProgressImpl;
+    private TaskProgress _exampleProgressImpl { get; set; } = new TaskProgress();
 
 
     // ========================================
@@ -73,7 +83,7 @@
 
     private void Perform()
     {
-        this._isStartExampleTask = true;
+        this.ExampleProgress.Apply();
     }
 
 
@@ -94,24 +104,29 @@
         {
             while (await timer.WaitForNextTickAsync(ctSource.Token))
             {
-                if (this._isStartExampleTask)
+                if (this._exampleProgressImpl.IsApplying)    // 申請中
                 {
-                    // 即時実行しません。いったん受理するだけです
-                    this._isAcceptedExampleTask = true;
-                    this._isStartExampleTask = false;
+                    // 即時実行しません。いったん受理するだけです。実行は次のカウントです。
+                    this._exampleProgressImpl.Accept();
                 }
-
-                if(this._isAcceptedExampleTask)
+                else if(this._exampleProgressImpl.IsAccepted)
                 {
-                    this._isAcceptedExampleTask = false;
+                    // 執行します
+                    this._exampleProgressImpl.Execute();
+                    System.Console.WriteLine($"ピコーン！　執行開始！ {DateTime.Now:HH:mm:ss.fff}");
 
-                    // ここが定期的に呼ばれる部分
-                    System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
+                    // 待ちません
+                    _ = Task.Run(async () =>
+                    {
+                        // 5秒待機
+                        await Task.Delay(5 * 1000);
 
-                    // 5秒待機
-                    await Task.Delay(5 * 1000);
-
-                    // TODO: 完了通知
+                        // 完了します
+                        this._exampleProgressImpl.Complete();
+                        System.Console.WriteLine($"ピコーン！　執行完了！ {DateTime.Now:HH:mm:ss.fff}");
+                        // 完了通知
+                        await this.OnExampleCompleted.InvokeAsync();
+                    });
                 }
             }
         }

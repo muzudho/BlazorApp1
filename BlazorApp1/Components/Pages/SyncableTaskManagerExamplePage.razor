@@ -1,4 +1,6 @@
 ﻿@page "/syncable-task-manager-example"
+
+<PageTitle>同期タスクマネージャーの例</PageTitle>
 <h3>SyncableTaskManagerExample</h3>
 
 <p>
@@ -22,11 +24,48 @@
 
 
     // ========================================
+    // ライフサイクルメソッド
+    // ========================================
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitialized］　初期化");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitializedAsync］　初期化");
+        await _MainAsync();
+    }
+
+
+    /// <summary>
+    /// 一度も呼び出されてない？
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+
+    // ========================================
     // その他
     // ========================================
 
 
-    async Task _MainAsync()
+    private async Task _MainAsync()
     {
         // 5秒ごとに実行したい場合
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
@@ -62,38 +101,6 @@
         catch (OperationCanceledException)
         {
             Console.WriteLine("タイマー正常終了～");
-        }
-    }
-
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitialized］　初期化");
-    }
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitializedAsync］　初期化");
-        await _MainAsync();
-    }
-
-
-    /// <summary>
-    /// 一度も呼び出されてない？
-    /// </summary>
-    /// <param name="firstRender"></param>
-    /// <returns></returns>
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
-            await this.InvokeAsync(this.StateHasChanged);
         }
     }
 

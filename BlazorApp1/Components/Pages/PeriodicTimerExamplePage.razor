@@ -1,33 +1,15 @@
 ﻿@page "/periodic-timer-example"
 @using System.Threading.Tasks
+
+<PageTitle>同期タイマーの例</PageTitle>
 <h3>PeriodicTimerComponent</h3>
 
 @code {
 
-    async Task _MainAsync()
-    {
-        // 1秒ごとに実行したい場合
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
-        // キャンセルしたいときはこれを用意（任意）
-        using var ctSource = new CancellationTokenSource();
-
-        try
-        {
-            while (await timer.WaitForNextTickAsync(ctSource.Token))
-            {
-                // ここが定期的に呼ばれる部分
-                System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
-
-                // 例: 何か重い処理をしてもOK（次のtickはズレない）
-                // await SomeAsyncWork();
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            Console.WriteLine("タイマー正常終了～");
-        }
-    }
+    // ========================================
+    // ライフサイクルメソッド
+    // ========================================
 
 
     protected override void OnInitialized()
@@ -58,6 +40,37 @@
         {
             System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
             await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+
+    // ========================================
+    // その他
+    // ========================================
+
+
+    private async Task _MainAsync()
+    {
+        // 1秒ごとに実行したい場合
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        // キャンセルしたいときはこれを用意（任意）
+        using var ctSource = new CancellationTokenSource();
+
+        try
+        {
+            while (await timer.WaitForNextTickAsync(ctSource.Token))
+            {
+                // ここが定期的に呼ばれる部分
+                System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
+
+                // 例: 何か重い処理をしてもOK（次のtickはズレない）
+                // await SomeAsyncWork();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("タイマー正常終了～");
         }
     }
 }

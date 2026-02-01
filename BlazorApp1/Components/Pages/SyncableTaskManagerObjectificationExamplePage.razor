@@ -94,7 +94,7 @@
 
     private async Task _WorkingAsync()
     {
-        // 1秒ごとに実行したい場合
+        // 1秒ごとに反応したい場合
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
         // キャンセルしたいときはこれを用意（任意）
@@ -104,16 +104,17 @@
         {
             while (await timer.WaitForNextTickAsync(ctSource.Token))
             {
-                // 受理されておらず、申請されていれば
+                // （申請側との対応）受理されておらず、申請されていれば
                 if (this._exampleProgressImpl.IsAcceptable)
                 {
-                    // 即時実行しません。いったん受理するだけです。実行は次のカウントです。
+                    // 受理して、申請は解消させます。
                     this._exampleProgressImpl.Accept();
                 }
-                // 執行中でなく、受理されていれば
-                else if(this._exampleProgressImpl.IsExecutable)
+
+                // （執行側との対応）執行中でなく、受理されていれば
+                if(this._exampleProgressImpl.IsExecutable)
                 {
-                    // 執行します
+                    // 執行開始します。受理は解消させます。
                     this._exampleProgressImpl.Execute();
                     System.Console.WriteLine($"ピコーン！　執行開始！ {DateTime.Now:HH:mm:ss.fff}");
 

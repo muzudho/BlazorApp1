@@ -2,7 +2,9 @@
 
 
 /// <summary>
+///     <pre>
 /// タスクの進捗
+///     </pre>
 /// </summary>
 public record TaskProgress : ITaskProgress
 {

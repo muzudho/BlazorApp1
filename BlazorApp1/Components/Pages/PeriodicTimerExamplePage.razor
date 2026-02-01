@@ -1,6 +1,7 @@
 ﻿@page "/periodic-timer-example"
 @using System.Threading.Tasks
 @implements IAsyncDisposable
+@inject NavigationManager NavigationMgr
 
 <PageTitle>同期タイマーの例</PageTitle>
 <h3>PeriodicTimerComponent</h3>
@@ -47,9 +48,27 @@
     }
 
 
+    // private async Task CleanupAsync()
+    // {
+    //     if (this.IsPrerendering)
+    //     {
+    //         System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＣleanupAsync］＜プリレンダリング＞　ページ遷移時破棄");
+    //         return;
+    //     }
+
+    //     System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＣleanupAsync］　ページ遷移時破棄２");
+    //     this._cancellationTokenSource.Cancel(); //  タイマーの終了
+    //     // JSとかも
+    // }
+
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+        //// ページ遷移時破棄
+        // this.NavigationMgr.LocationChanged += async (_, __) => await CleanupAsync();
+
         if (this.IsPrerendering)
         {
             System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＯnInitialized］＜プリレンダリング＞　初期化");

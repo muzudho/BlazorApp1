@@ -1,8 +1,9 @@
 ﻿@page "/syncable-task-manager-example"
+@using BlazorApp1.Models
 @rendermode InteractiveServer	// ボタンの @onclick に必要
 
-<PageTitle>同期タスクマネージャーの例</PageTitle>
-<h3>SyncableTaskManagerExample</h3>
+<PageTitle>同期タスクマネージャーの例（オブジェクト化）</PageTitle>
+<h3>SyncableTaskManagerObjectificationExample</h3>
 
 <p>
     １５秒間ぐらい連打してみてください。だいたい５秒置きに１回実行されます。<br/>
@@ -13,15 +14,24 @@
 
 
     // ========================================
+    // パラメーター　＞　フック
+    // ========================================
+
+
+    [Parameter]
+    public EventCallback OnExampleCompleted { get; set; }
+
+
+    // ========================================
     // プロパティ
     // ========================================
 
 
     /// <summary>
-    /// タスクの要求
+    /// タスクの進捗
     /// </summary>
-    private bool _isStartExampleTask;
-    private bool _isAcceptedExampleTask;
+    public TaskProgress ExampleProgress => this._exampleProgressImpl;
+    private TaskProgress _exampleProgressImpl { get; set; } = new TaskProgress();
 
 
     // ========================================
@@ -32,14 +42,14 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitialized］　初期化");
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnInitialized］　初期化");
     }
 
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitializedAsync］　初期化");
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnInitializedAsync］　初期化");
 
         // 終わりを待ちません
         _ = Task.Run(async () =>
@@ -60,7 +70,7 @@
 
         if (firstRender)
         {
-            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
@@ -73,7 +83,7 @@
 
     private void Perform()
     {
-        this._isStartExampleTask = true;
+        this.ExampleProgress.Apply();
     }
 
 
@@ -84,8 +94,8 @@
 
     private async Task _WorkingAsync()
     {
-        // 5秒ごとに実行したい場合
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+        // 1秒ごとに反応したい場合
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
         // キャンセルしたいときはこれを用意（任意）
         using var ctSource = new CancellationTokenSource();
@@ -94,24 +104,32 @@
         {
             while (await timer.WaitForNextTickAsync(ctSource.Token))
             {
-                if (this._isStartExampleTask)
+                // （申請側との対応）受理されておらず、申請されていれば
+                if (this._exampleProgressImpl.IsAcceptable)
                 {
-                    // 即時実行しません。いったん受理するだけです
-                    this._isAcceptedExampleTask = true;
-                    this._isStartExampleTask = false;
+                    // 受理して、申請は解消させます。
+                    this._exampleProgressImpl.Accept();
                 }
 
-                if(this._isAcceptedExampleTask)
+                // （執行側との対応）執行中でなく、受理されていれば
+                if(this._exampleProgressImpl.IsExecutable)
                 {
-                    this._isAcceptedExampleTask = false;
+                    // 執行開始します。受理は解消させます。
+                    this._exampleProgressImpl.Execute();
+                    System.Console.WriteLine($"ピコーン！　執行開始！ {DateTime.Now:HH:mm:ss.fff}");
 
-                    // ここが定期的に呼ばれる部分
-                    System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
+                    // 終わりを待ちません
+                    _ = Task.Run(async () =>
+                    {
+                        // 5秒待機
+                        await Task.Delay(5 * 1000);
 
-                    // 5秒待機
-                    await Task.Delay(5 * 1000);
-
-                    // TODO: 完了通知
+                        // 完了します
+                        this._exampleProgressImpl.Complete();
+                        System.Console.WriteLine($"ピコーン！　執行完了！ {DateTime.Now:HH:mm:ss.fff}");
+                        // 完了通知
+                        await this.OnExampleCompleted.InvokeAsync();
+                    });
                 }
             }
         }

@@ -1,0 +1,123 @@
+﻿@page "/syncable-task-manager-bulky-example"
+@rendermode InteractiveServer	// ボタンの @onclick に必要
+
+<PageTitle>同期タスクマネージャーの例</PageTitle>
+<h3>SyncableTaskManagerExample</h3>
+
+<p>
+    １５秒間ぐらい連打してみてください。だいたい５秒置きに１回実行されます。<br/>
+    <button @onclick="this.Perform">実行</button>
+</p>
+
+@code {
+
+
+    // ========================================
+    // プロパティ
+    // ========================================
+
+
+    /// <summary>
+    /// タスクの要求
+    /// </summary>
+    private bool _isStartExampleTask;
+    private bool _isAcceptedExampleTask;
+
+
+    // ========================================
+    // ライフサイクルメソッド
+    // ========================================
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitialized］　初期化");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnInitializedAsync］　初期化");
+
+        // 終わりを待ちません
+        _ = Task.Run(async () =>
+        {
+            await _WorkingAsync();
+        });
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+
+    // ========================================
+    // イベントハンドラ
+    // ========================================
+
+
+    private void Perform()
+    {
+        this._isStartExampleTask = true;
+    }
+
+
+    // ========================================
+    // その他
+    // ========================================
+
+
+    private async Task _WorkingAsync()
+    {
+        // 5秒ごとに実行したい場合
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+
+        // キャンセルしたいときはこれを用意（任意）
+        using var ctSource = new CancellationTokenSource();
+
+        try
+        {
+            while (await timer.WaitForNextTickAsync(ctSource.Token))
+            {
+                if (this._isStartExampleTask)
+                {
+                    // 即時実行しません。いったん受理するだけです
+                    this._isAcceptedExampleTask = true;
+                    this._isStartExampleTask = false;
+                }
+
+                if(this._isAcceptedExampleTask)
+                {
+                    this._isAcceptedExampleTask = false;
+
+                    // ここが定期的に呼ばれる部分
+                    System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");
+
+                    // 5秒待機
+                    await Task.Delay(5 * 1000);
+
+                    // TODO: 完了通知
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("タイマー正常終了～");
+        }
+    }
+}

@@ -28,13 +28,13 @@
 
 
     /// <summary>
-    /// 一度も呼び出されてない？
+    /// 
     /// </summary>
     /// <param name="firstRender"></param>
     /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
 
         if (firstRender)
         {

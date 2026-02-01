@@ -1,0 +1,159 @@
+﻿@page "/syncable-multi-task-manager-example"
+@using BlazorApp1.Models
+@rendermode InteractiveServer	// ボタンの @onclick に必要
+
+<PageTitle>同期タスクマネージャーの例（オブジェクト化）</PageTitle>
+<h3>SyncableTaskManagerObjectificationExample</h3>
+
+<p>
+    １５秒間ぐらい連打してみてください。だいたい５秒置きに１回実行されます。<br/>
+</p>
+<p>
+    <button @onclick="() => this.PerformFruit(FruitsTaskTickets.Apple)">アップル実行</button>
+</p>
+<p>
+    <button @onclick="() => this.PerformFruit(FruitsTaskTickets.Banana)">バナナ実行</button>
+</p>
+<p>
+    <button @onclick="() => this.PerformFruit(FruitsTaskTickets.Cherry)">チェリー実行</button>
+</p>
+
+@code {
+
+
+    // ========================================
+    // パラメーター　＞　フック
+    // ========================================
+
+
+    [Parameter]
+    public EventCallback<FruitsTaskTickets> OnFruitsCompleted { get; set; }
+
+
+    // ========================================
+    // プロパティ
+    // ========================================
+
+
+    /// <summary>
+    /// ［アップル］タスクの進捗
+    /// </summary>
+    public ITaskProgress GetFruitsProgress(FruitsTaskTickets fruit) => this._fruitsProgressImpl[fruit.AsInt()];
+    private TaskProgress[] _fruitsProgressImpl { get; set; }
+        = Enumerable.Range(0, FruitsTaskTicketsHelper.Size)
+            .Select(_ =>
+            {
+                return new TaskProgress();
+            }).ToArray();
+
+
+    // ========================================
+    // ライフサイクルメソッド
+    // ========================================
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnInitialized］　初期化");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnInitializedAsync］　初期化");
+
+        // 終わりを待ちません
+        _ = Task.Run(async () =>
+        {
+            await _WorkingAsync();
+        });
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＳyncableTaskManagerObjectificationExamplePage ＞ ＯnAfterRenderAsync］　最初の描画");
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+
+    // ========================================
+    // イベントハンドラ
+    // ========================================
+
+
+    private void PerformFruit(FruitsTaskTickets fruit)
+    {
+        this.GetFruitsProgress(fruit).Apply();
+    }
+
+
+    // ========================================
+    // その他
+    // ========================================
+
+
+    private async Task _WorkingAsync()
+    {
+        // 1秒ごとに反応したい場合
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        // キャンセルしたいときはこれを用意（任意）
+        using var ctSource = new CancellationTokenSource();
+
+        try
+        {
+            while (await timer.WaitForNextTickAsync(ctSource.Token))
+            {
+                await FruitsTaskTicketsHelper.ForeachOfMain(
+                    onEach: async (FruitsTaskTickets fruit) =>
+                    {
+                        // （申請側との対応）受理されておらず、申請されていれば
+                        if (this._fruitsProgressImpl[fruit.AsInt()].IsAcceptable)
+                        {
+                            // 受理して、申請は解消させます。
+                            this._fruitsProgressImpl[fruit.AsInt()].Accept();
+                        }
+
+                        // （執行側との対応）執行中でなく、受理されていれば
+                        if (this._fruitsProgressImpl[fruit.AsInt()].IsExecutable)
+                        {
+                            // 執行開始します。受理は解消させます。
+                            this._fruitsProgressImpl[fruit.AsInt()].Execute();
+                            System.Console.WriteLine($"ピコーン！　[{fruit}]執行開始！ {DateTime.Now:HH:mm:ss.fff}");
+
+                            // 終わりを待ちません
+                            _ = Task.Run(async () =>
+                            {
+                                // 5秒待機
+                                await Task.Delay(5 * 1000);
+
+                                // 完了します
+                                this._fruitsProgressImpl[fruit.AsInt()].Complete();
+                                System.Console.WriteLine($"ピコーン！　[{fruit}]執行完了！ {DateTime.Now:HH:mm:ss.fff}");
+                                // 完了通知
+                                await this.OnFruitsCompleted.InvokeAsync(FruitsTaskTickets.Apple);
+                            });
+                        }
+                    }
+                );
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("タイマー正常終了～");
+        }
+    }
+}

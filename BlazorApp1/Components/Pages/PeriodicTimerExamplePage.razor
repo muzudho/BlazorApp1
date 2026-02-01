@@ -23,7 +23,12 @@
     {
         await base.OnInitializedAsync();
         System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＯnInitializedAsync］　初期化");
-        await _MainAsync();
+
+        // 終わりを待ちません
+        _ = Task.Run(async () =>
+        {
+            await _WorkingAsync();
+        });
     }
 
 
@@ -48,8 +53,8 @@
     // その他
     // ========================================
 
-    // TODO: バックグラウンド・スレッドで行うこと
-    private async Task _MainAsync()
+
+    private async Task _WorkingAsync()
     {
         // 1秒ごとに実行したい場合
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));

@@ -1,5 +1,6 @@
 ﻿@page "/periodic-timer-example"
 @using System.Threading.Tasks
+@implements IAsyncDisposable
 
 <PageTitle>同期タイマーの例</PageTitle>
 <h3>PeriodicTimerComponent</h3>
@@ -8,13 +9,53 @@
 
 
     // ========================================
+    // プロパティ
+    // ========================================
+
+
+    /// <summary>
+    /// プリレンダリングか。
+    /// </summary>
+    private bool IsPrerendering => !this.RendererInfo.IsInteractive;
+
+
+    /// <summary>
+    /// タイマーをキャンセルしたいとき
+    /// </summary>
+    private CancellationTokenSource _cancellationTokenSource = new ();
+
+
+    // ========================================
     // ライフサイクルメソッド
     // ========================================
+
+
+    /// <summary>
+    /// 呼んでないのに呼び出される？
+    /// </summary>
+    /// <returns></returns>
+    public async ValueTask DisposeAsync()
+    {
+        if (this.IsPrerendering)
+        {
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＤisposeAsync］＜プリレンダリング＞　破棄");
+            return;
+        }
+
+        System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＤisposeAsync］　破棄");
+        this._cancellationTokenSource.Cancel(); //  タイマーの終了
+    }
 
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        if (this.IsPrerendering)
+        {
+            System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＯnInitialized］＜プリレンダリング＞　初期化");
+            return;
+        }
+
         System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}]［ＰeriodicTimerExamplePage ＞ ＯnInitialized］　初期化");
     }
 
@@ -59,12 +100,9 @@
         // 1秒ごとに実行したい場合
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
-        // キャンセルしたいときはこれを用意（任意）
-        using var ctSource = new CancellationTokenSource();
-
         try
         {
-            while (await timer.WaitForNextTickAsync(ctSource.Token))
+            while (await timer.WaitForNextTickAsync(this._cancellationTokenSource.Token))
             {
                 // ここが定期的に呼ばれる部分
                 System.Console.WriteLine($"ピコーン！ {DateTime.Now:HH:mm:ss.fff}");

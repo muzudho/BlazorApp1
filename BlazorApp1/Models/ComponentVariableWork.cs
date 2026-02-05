@@ -9,7 +9,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     // ========================================
 
 
-    public R? Work { get; set; }
+    public R Work { get; set; }
 
 
     // ========================================
@@ -17,7 +17,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     // ========================================
 
 
-    public ComponentVariableWork(R? result) : base(result)
+    public ComponentVariableWork(R result) : base(result)
     {
         this.Work = result;
     }
@@ -32,8 +32,8 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 
 
     public override void SetResultFromSource(
-        S? source,
-        Func<S?, R?> convertToResult)
+        S source,
+        Func<S, R> convertToResult)
     {
         this.Work = convertToResult(source);        // コピー渡し
         this.Result = convertToResult(source);      // コピー渡し
@@ -51,15 +51,15 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
     public void ApplyChangedWork(
-        Func<R?> copyWork,
-        Action<R?, R?>? onChanged = null,
+        Func<R> copyWork,
+        Action<R, R>? onChanged = null,
         Action? onUnchanged = null)
     {
         var oldValue = this._lastResult;
         var newValue = copyWork();
 
         // a != b
-        if (!EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
+        if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
             this._lastResult = newValue;
             this.SetResult(
@@ -79,15 +79,15 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedWork(
-        Func<Task<R?>> copyWork,
-        Func<R?, R?, Task>? onChanged = null,
+        Func<Task<R>> copyWork,
+        Func<R, R, Task>? onChanged = null,
         Func<Task>? onUnchanged = null)
     {
         var oldValue = this._lastResult;
         var newValue = await copyWork();
 
         // a != b
-        if (!EqualityComparer<R?>.Default.Equals(this._lastResult, newValue))
+        if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
             this._lastResult = newValue;
             await this.SetResult(
@@ -102,7 +102,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 
 
     public override void SetResult(
-        Func<R?> copyResult)
+        Func<R> copyResult)
     {
         this.Work = copyResult();         // コピー渡し
         this.Result = copyResult();       // コピー渡し
@@ -110,7 +110,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 
 
     public override async Task SetResult(
-        Func<Task<R?>> copyResult)
+        Func<Task<R>> copyResult)
     {
         this.Work = await copyResult();         // コピー渡し
         this.Result = await copyResult();       // コピー渡し

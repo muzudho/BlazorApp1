@@ -56,12 +56,12 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         Action? onUnchanged = null)
     {
         var oldValue = this._lastResult;
-        var newValue = copyWork();
+        var newValue = copyWork();          // 値渡し
 
         // a != b
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
-            this._lastResult = newValue;
+            this._lastResult = copyWork();          // 値渡し
             this.SetResult(
                 copyResult: copyWork);
         }
@@ -84,12 +84,12 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         Func<Task>? onUnchanged = null)
     {
         var oldValue = this._lastResult;
-        var newValue = await copyWork();
+        var newValue = await copyWork();    // 値渡し
 
         // a != b
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
-            this._lastResult = newValue;
+            this._lastResult = await copyWork();    // 値渡し
             await this.SetResult(
                 copyResult: copyWork);
         }

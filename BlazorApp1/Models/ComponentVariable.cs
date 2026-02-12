@@ -11,7 +11,10 @@ public class ComponentVariable<S, R>
     // ========================================
 
 
-    public S Source { get; set; }
+    ///// <summary>
+    ///// 未使用？
+    ///// </summary>
+    //public S Source { get; set; }
 
     /// <summary>
     ///     <pre>
@@ -69,15 +72,15 @@ public class ComponentVariable<S, R>
     public void ApplyChangedSource(
         Func<S> copySource,
         Func<S, R> convertToResult,
-        Action<S, S>? onProcessed = null)
+        Action<S?, S>? onProcessed = null)
     {
         var oldValue = this._lastSource;
-        var newValue = copySource();
+        var newValue = copySource();        // 値渡し
 
         // a != b
         if (!EqualityComparer<S>.Default.Equals(this._lastSource, newValue))
         {
-            this._lastSource = newValue;
+            this._lastSource = copySource();    // 値渡し
             this.SetResultFromSource(
                 source: newValue,
                 convertToResult: convertToResult);
@@ -97,17 +100,17 @@ public class ComponentVariable<S, R>
     /// <param name="onProcessed"></param>
     /// <param name="onUnchanged"></param>
     public async Task ApplyChangedSource(
-        Func<S> copySource,
+        Func<Task<S>> copySource,
         Func<S, Task<R>> convertToResult,
-        Func<S, S, Task>? onProcessed = null)
+        Func<S?, S, Task>? onProcessed = null)
     {
         var oldValue = this._lastSource;
-        var newValue = copySource();
+        var newValue = await copySource();      // 値渡し
 
         // a != b
         if (!EqualityComparer<S>.Default.Equals(this._lastSource, newValue))
         {
-            this._lastSource = newValue;
+            this._lastSource = await copySource();      // 値渡し
             await this.SetResultFromSource(
                 source: newValue,
                 convertToResult: convertToResult);
@@ -151,12 +154,12 @@ public class ComponentVariable<S, R>
         Action<R, R>? onProcessed = null)
     {
         var oldResult = this._lastResult;
-        var newResult = copyResult();
+        var newResult = copyResult();       // 値渡し
 
         // a != b
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newResult))
         {
-            this._lastResult = newResult;
+            this._lastResult = copyResult();       // 値渡し
             this.SetResult(
                 copyResult: copyResult);
         }
@@ -179,12 +182,12 @@ public class ComponentVariable<S, R>
         Func<Task>? onUnchanged = null)
     {
         var oldResult = this._lastResult;
-        var newResult = await copyResult();
+        var newResult = await copyResult();     // 値渡し
 
         // a != b
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newResult))
         {
-            this._lastResult = newResult;
+            this._lastResult = await copyResult();     // 値渡し
             await this.SetResult(
                 copyResult: copyResult);
         }

@@ -5,15 +5,6 @@
 /// </summary>
 internal class MuzRValue<T>
 {
-    internal static void SetValue(ref T? target, MuzRValue<T>? rValue)
-    {
-        if (rValue != null)
-        {
-            target = rValue.Value;
-        }
-    }
-
-
     internal MuzRValue(T? value)
     {
         this.Value = value;

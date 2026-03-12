@@ -62,7 +62,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
             this._lastResult = copyWork();          // 値渡し
-            this.SetResult(
+            this.Accept(
                 copyResult: copyWork);
         }
 
@@ -90,7 +90,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newValue))
         {
             this._lastResult = await copyWork();    // 値渡し
-            await this.SetResult(
+            await this.Accept(
                 copyResult: copyWork);
         }
 
@@ -101,7 +101,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     }
 
 
-    public override void SetResult(
+    public override void Accept(
         Func<R> copyResult)
     {
         this.Work = copyResult();         // コピー渡し
@@ -109,7 +109,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     }
 
 
-    public override async Task SetResult(
+    public override async Task Accept(
         Func<Task<R>> copyResult)
     {
         this.Work = await copyResult();         // コピー渡し

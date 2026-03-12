@@ -160,7 +160,7 @@ public class ComponentVariable<S, R>
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newResult))
         {
             this._lastResult = copyResult();       // 値渡し
-            this.SetResult(
+            this.Accept(
                 copyResult: copyResult);
         }
 
@@ -188,7 +188,7 @@ public class ComponentVariable<S, R>
         if (!EqualityComparer<R>.Default.Equals(this._lastResult, newResult))
         {
             this._lastResult = await copyResult();     // 値渡し
-            await this.SetResult(
+            await this.Accept(
                 copyResult: copyResult);
         }
 
@@ -199,14 +199,31 @@ public class ComponentVariable<S, R>
     }
 
 
-    public virtual void SetResult(
+    /// <summary>
+    ///     <pre>
+    /// 値の確定。
+    /// 
+    ///     - 同期版。
+    ///     </pre>
+    /// </summary>
+    /// <param name="copyResult"></param>
+    public virtual void Accept(
         Func<R> copyResult)
     {
         this.Result = copyResult();
     }
 
 
-    public virtual async Task SetResult(
+    /// <summary>
+    ///     <pre>
+    /// 値の確定。
+    /// 
+    ///     - 非同期版。
+    ///     </pre>
+    /// </summary>
+    /// <param name="copyResult"></param>
+    /// <returns></returns>
+    public virtual async Task Accept(
         Func<Task<R>> copyResult)
     {
         this.Result = await copyResult();

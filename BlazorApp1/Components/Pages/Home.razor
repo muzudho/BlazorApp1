@@ -1,7 +1,11 @@
 ﻿@page "/"
+
 @using BlazorApp1.Components.Shared
+
 @implements IAsyncDisposable	// これでDisposeを有効化
+
 @rendermode InteractiveServer	// ボタンの @onclick に必要
+
 @inject NavigationManager NavigationMgr
 
 <PageTitle>Home</PageTitle>
@@ -21,7 +25,8 @@
 	<li><a href="https://localhost:7249/syncable-task-manager-bulky-example/">同期的タスクマネージャーの例（ベタ書きソース）</a></li>
 	<li><a href="https://localhost:7249/syncable-task-manager-example/">同期的タスクマネージャーの例（オブジェクト化）</a></li>
 	<li><a href="https://localhost:7249/syncable-multi-task-manager-example/">同期的マルチタスクマネージャーの例</a></li>
-	
+	<li><a href="https://localhost:7249/nullity-example/">無視とヌル化</a></li>
+
 </ul>
 
 <h2>練習中</h2>

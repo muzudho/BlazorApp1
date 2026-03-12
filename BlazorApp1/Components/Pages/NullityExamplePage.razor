@@ -1,0 +1,34 @@
+﻿@page "/nullity-example"
+
+@using BlazorApp1.Models
+
+<PageTitle>無視とヌル化</PageTitle>
+
+<h3>無視とヌル化</h3>
+
+<p>りんご　＝　@Apple</p>
+<p>バナナ　＝　@Banana</p>
+<p>さくらんぼ　＝　@Cherry</p>
+
+@code {
+	private int? Apple { get; set; } = 10;
+	private int? Banana { get; set; } = 20;
+	private int? Cherry { get; set; } = 30;
+
+	internal void SetFruits(
+		MuzRValue<int?>? apple = null,
+		MuzRValue<int?>? banana = null,
+		MuzRValue<int?>? cherry = null)
+	{
+		this.Apple = apple == null ? this.Apple : apple.Value;
+		this.Banana = banana == null ? this.Banana : banana.Value;
+		this.Cherry = cherry == null ? this.Cherry : cherry.Value;
+	}
+
+	protected override void OnInitialized()
+	{
+		this.SetFruits(
+			banana: new MuzRValue<int?>(50),
+			cherry: new MuzRValue<int?>(null));
+	}
+}

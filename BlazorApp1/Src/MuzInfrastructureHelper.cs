@@ -1,23 +1,38 @@
 ﻿namespace BlazorApp1.Src;
 
 using BlazorApp1.Src.Infrastructure.Configuration;
+using BlazorApp1.Src.Infrastructure.Logging;
 
 /// <summary>
 /// どんなコンソール・アプリを作るときでも、本題に入る前に似たようなコードを書くことになる……、そんな似たコード［ホストビルド］をまとめたヘルパークラスだぜ（＾～＾）！
 /// </summary>
-public class MuzInfrastructureHelper
+internal static class MuzInfrastructureHelper
 {
     public static async Task BuildHostAsync(
         string[] commandLineArgs,
         Func</*IHost*/ WebApplication, Task> onHostEnabled)
     {
-        //HostApplicationBuilder builder = Host.CreateApplicationBuilder(commandLineArgs);  // ビルダー作成（＾～＾）
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(commandLineArgs);  // ビルダー作成（＾～＾）
-
+        // ビルダー作成（＾～＾）
+        //
+        //      ここでは、［コンソールアプリケーション］用のビルダーを作るぜ（＾～＾）！
+        //      もし、［ウェブアプリケーション］用のビルダーが必要なら、コメントアウトしてある行を使って、コードの対応個所の型を全部書き替えてくれだぜ（＾～＾）！
+        //HostApplicationBuilder builder = Host.CreateApplicationBuilder(commandLineArgs);  // コンソールアプリケーション用（＾～＾）
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(commandLineArgs);  // ウェブアプリケーション用（＾～＾）
 
         await SetupBeforeBuildAsync(builder);    // ビルド前の処理（＾～＾）
         var host = builder.Build(); // ホストビルド（＾～＾）
-        await onHostEnabled(host);  // ホストは有効になっているぜ（＾▽＾）！
+
+        //await onHostEnabled(host);  // ホストは有効になっているぜ（＾▽＾）！
+        await MuzLogging.SetupAfterHostBuildAsync(
+            configurationMgr: builder.Configuration,
+            host: host,
+            onLoggingServiceEnabled: async () =>
+            {
+                // ここから、以下のようにして、ロガー（ILogger）を使えるようになったぜ（＾▽＾）！
+                //var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+                await onHostEnabled(host);
+            });
     }
 
 
@@ -33,6 +48,14 @@ public class MuzInfrastructureHelper
 
         MuzAppSettingsHelper.SetupBeforeHostBuild(builder);   // ［アプリケーション設定ファイル］を読み書きできるようにするための準備をするぜ（＾～＾）！
 
+        await MuzLogging.SetupBeforeHostBuildAsync( // ［ロギング］するための準備をするぜ（＾～＾）！
+            builder: builder,
+            onBootstrapLoggingEnabled: async (bootstrapLogger) =>
+            {
+                // ここから `bootstrapLogger` を使った［ロギング］できる（＾～＾）！
+                bootstrapLogger.LogInformation("ホストビルド前だが、ブートストラップ・ログは出せるぜ（＾～＾）！");
+            });
+
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -42,9 +65,10 @@ public class MuzInfrastructureHelper
     /// <summary>
     /// アプリケーション終了時に片付けるぜ（＾▽＾）
     /// </summary>
-    /// <returns></returns>
     public static async Task Cleanup()
     {
+        // お前のアプリケーションに合わせて、［片付け］コードを追加していってくれだぜ（＾～＾）！
 
+        MuzLogging.Cleanup(); // ロガーのクリーンアップ（＾～＾）
     }
 }

@@ -19,6 +19,10 @@ try
             var appSettings = app.Services.GetRequiredService<IOptions<MuzAppSettings>>().Value;
             Console.WriteLine($"AppName: {appSettings.AppName}");
 
+            // ［ロガー］の動作確認してみようぜ（＾～＾）
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("ログを書き込むぜ～（＾～＾）！");
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -36,9 +40,7 @@ try
                 .AddInteractiveServerRenderMode();
 
             app.Run();
-
         });
-
 }
 catch (Exception ex)
 {

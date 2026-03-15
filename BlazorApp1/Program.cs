@@ -6,16 +6,11 @@ try
     // ホストビルドするぜ（＾～＾）！
     // ［ホスト］ってのは［汎用ホスト］のことで、いろいろ［サービス］っていう便利機能を付け加えることができるフレームワークみたいなもんだぜ（＾～＾）
     // それを［ビルド］するぜ（＾▽＾）
-    await MuzInfrastructureService.BuildHostAsync(
+    await MuzInfrastructureHelper.BuildHostAsync(
         commandLineArgs: args,
-        onHostEnabled: async (host) =>
+        onHostEnabled: async (app) =>
         {
-            // ここからビルドされた［汎用ホスト］が使えるぜ（＾▽＾）！
-
-            var builder = WebApplication.CreateBuilder(args);
-
-
-            var app = builder.Build();
+            // ここからビルドされた［汎用ホスト］（app）が使えるぜ（＾▽＾）！
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

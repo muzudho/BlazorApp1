@@ -1,13 +1,13 @@
 ﻿namespace BlazorApp1.Src;
 
 /// <summary>
-/// どんなコンソール・アプリを作るときでも、本題に入る前に似たようなコードを書くことになる……、そんな似たコード［ホストビルド］をまとめたクラスだぜ（＾～＾）！
+/// どんなコンソール・アプリを作るときでも、本題に入る前に似たようなコードを書くことになる……、そんな似たコード［ホストビルド］をまとめたヘルパークラスだぜ（＾～＾）！
 /// </summary>
-public class MuzInfrastructureService
+public class MuzInfrastructureHelper
 {
     public static async Task BuildHostAsync(
         string[] commandLineArgs,
-        Func<IHost, Task> onHostEnabled)
+        Func</*IHost*/ WebApplication, Task> onHostEnabled)
     {
         //HostApplicationBuilder builder = Host.CreateApplicationBuilder(commandLineArgs);  // ビルダー作成（＾～＾）
         WebApplicationBuilder builder = WebApplication.CreateBuilder(commandLineArgs);  // ビルダー作成（＾～＾）

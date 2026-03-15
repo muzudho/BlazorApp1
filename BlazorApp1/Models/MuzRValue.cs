@@ -1,15 +1,19 @@
 ﻿namespace BlazorApp1.Models;
 
 /// <summary>
-/// 代入の右辺値（Right-hand side value）。
+///     <pre>
+/// ［Bad Know-how/Good wrapper > Collection］　果物の選択。
+///
+///     - 代入の右辺値（Right-hand side value）。
+///     </pre>
 /// </summary>
-internal class MuzRValue<T>
+public class MuzRValue<T>
 {
-    internal MuzRValue(T? value)
+    public MuzRValue(T? value)
     {
         this.Value = value;
     }
 
 
-    internal T? Value { get; init; }
+    public T? Value { get; init; }
 }

@@ -1,5 +1,7 @@
 ﻿namespace BlazorApp1.Src;
 
+using BlazorApp1.Src.Infrastructure.Configuration;
+
 /// <summary>
 /// どんなコンソール・アプリを作るときでも、本題に入る前に似たようなコードを書くことになる……、そんな似たコード［ホストビルド］をまとめたヘルパークラスだぜ（＾～＾）！
 /// </summary>
@@ -27,6 +29,9 @@ public class MuzInfrastructureHelper
     private static async Task SetupBeforeBuildAsync(WebApplicationBuilder builder)
     {
         // お前のアプリケーションに合わせて、［サービス］を追加していってくれだぜ（＾～＾）！
+        Console.WriteLine("ホストビルドする前にやることがあればここでやるぜ（＾～＾）！例えば、［サービス］を追加したりとか、そういうのだぜ（＾～＾）！");
+
+        MuzAppSettingsHelper.SetupBeforeHostBuild(builder);   // ［アプリケーション設定ファイル］を読み書きできるようにするための準備をするぜ（＾～＾）！
 
         // Add services to the container.
         builder.Services.AddRazorComponents()

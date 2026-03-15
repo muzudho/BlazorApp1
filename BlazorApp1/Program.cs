@@ -1,5 +1,8 @@
 using BlazorApp1.Components;
 using BlazorApp1.Src;
+using BlazorApp1.Src.Infrastructure.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 try
 {
@@ -11,6 +14,10 @@ try
         onHostEnabled: async (app) =>
         {
             // ここからビルドされた［汎用ホスト］（app）が使えるぜ（＾▽＾）！
+
+            // ［設定ファイル］の動作確認してみようぜ（＾～＾）
+            var appSettings = app.Services.GetRequiredService<IOptions<MuzAppSettings>>().Value;
+            Console.WriteLine($"AppName: {appSettings.AppName}");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

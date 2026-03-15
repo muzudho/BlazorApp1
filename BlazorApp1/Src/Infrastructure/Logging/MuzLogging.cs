@@ -1,5 +1,6 @@
 ﻿namespace BlazorApp1.Src.Infrastructure.Logging;
 
+using HelloConsoleAppCSharp.Src.Infrastructure.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,6 +53,9 @@ internal static class MuzLogging
         var bootstrapLogger = builder.Logging.Services.BuildServiceProvider()
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("BootstrapLogger");   // カテゴリ名は自由（Program とかでもOK）
+
+        // ［複数のロガーを使い分けるサービス］を DI注入するぜ（＾～＾）
+        builder.Services.AddSingleton<IMuzLoggingService, MuzLoggingService>();
 
         try
         {

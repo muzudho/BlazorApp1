@@ -1,6 +1,7 @@
 using BlazorApp1.Components;
 using BlazorApp1.Src;
 using BlazorApp1.Src.Infrastructure.Configuration;
+using HelloConsoleAppCSharp.Src.Infrastructure.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -15,13 +16,18 @@ try
         {
             // ここからビルドされた［汎用ホスト］（app）が使えるぜ（＾▽＾）！
 
-            // ［設定ファイル］の動作確認してみようぜ（＾～＾）
+            // ［アプリケーション設定ファイル］を動作確認してみようぜ（＾～＾）
             var appSettings = app.Services.GetRequiredService<IOptions<MuzAppSettings>>().Value;
             Console.WriteLine($"AppName: {appSettings.AppName}");
 
-            // ［ロガー］の動作確認してみようぜ（＾～＾）
+            // ［ロガー］を動作確認してみようぜ（＾～＾）
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("ログを書き込むぜ～（＾～＾）！");
+
+            // ［ロガー別のログ］を動作確認してみようぜ（＾～＾）
+            var loggingSvc = app.Services.GetRequiredService<IMuzLoggingService>();
+            loggingSvc.Others.LogInformation("その他のログだぜ（＾～＾）");
+            loggingSvc.Verbose.LogInformation("大量のログだぜ（＾～＾）");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

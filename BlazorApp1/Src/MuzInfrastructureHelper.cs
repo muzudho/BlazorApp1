@@ -37,4 +37,14 @@ public class MuzInfrastructureHelper
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
     }
+
+
+    /// <summary>
+    /// アプリケーション終了時に片付けるぜ（＾▽＾）
+    /// </summary>
+    /// <returns></returns>
+    public static async Task Cleanup()
+    {
+
+    }
 }

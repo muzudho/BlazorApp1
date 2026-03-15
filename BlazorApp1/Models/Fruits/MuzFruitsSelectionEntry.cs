@@ -2,10 +2,10 @@
 
 /// <summary>
 ///     <pre>
-/// ［Bad Know-how/Good wrapper > Collection］　果物の選択。
+/// 果物の選択の入力。
 ///     </pre>
 /// </summary>
-public record MuzFruitsChoice
+public record MuzFruitsSelectionEntry
 {
 
 
@@ -15,12 +15,23 @@ public record MuzFruitsChoice
 
 
     /// <summary>
+    /// 未設定のときの代替値。
+    /// </summary>
+    internal static MuzFruitsSelectionEntry AlternativeWhenNotSet = new MuzFruitsSelectionEntry(
+        getAlternativeWhenNotSet: () => false,
+        getAlternativeWhenWhitespace: () => false,
+        getAlternativeWhenParseError: () => false)
+    {
+    };
+
+
+    /// <summary>
     /// 生成。
     /// </summary>
     /// <param name="hasApple">りんごを持っている。</param>
     /// <param name="hasBanana">バナナを持っている。</param>
     /// <param name="hasCherry">さくらんぼを持っている。</param>
-    public MuzFruitsChoice(
+    public MuzFruitsSelectionEntry(
         Func<bool> getAlternativeWhenNotSet,
         Func<bool> getAlternativeWhenWhitespace,
         Func<bool> getAlternativeWhenParseError,

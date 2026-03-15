@@ -1,0 +1,70 @@
+﻿@page "/fruits-selection-example"
+@using BlazorApp1.Models
+
+<h3>果物の選択</h3>
+
+<ul>
+    <li>りんごを持っている： @AppleStr</li>
+    <li>バナナを持っている： @BananaStr</li>
+    <li>さくらんぼを持っている： @CherryStr</li>
+</ul>
+
+@code
+{
+
+
+    // ========================================
+    // 窓口プロパティ
+    // ========================================
+
+
+    /// <summary>
+    /// 果物の選択の入力値。
+    /// </summary>
+    private MuzFruitsSelectionEntry FruitsSelectionEntry { get; set; } = MuzFruitsSelectionEntry.AlternativeWhenNotSet;
+
+    /// <summary>
+    /// りんごを持っている。
+    /// </summary>
+    
+    [SupplyParameterFromQuery(Name = "Apple")]
+	public string? AppleStr { get; set; }
+
+    /// <summary>
+    /// バナナを持っている。
+    /// </summary>
+
+    [SupplyParameterFromQuery(Name = "Banana")]
+    public string? BananaStr { get; set; }
+
+    /// <summary>
+    /// さくらんぼを持っている。
+    /// </summary>
+
+    [SupplyParameterFromQuery(Name = "Cherry")]
+    public string? CherryStr { get; set; }
+
+
+    // ========================================
+    // ライフサイクル・メソッド
+    // ========================================
+
+
+	/// <summary>
+	///		<pre>
+	/// パラメーターセット時。
+	/// 
+	///		- `OnInitializeAsync()` の完了後に呼び出されるか、または呼び出されないのどちらかです。
+    ///		- このメソッドの呼び出し時点で、［クエリーパラメーター］または［ＸＭＬタグ・パラメーター］に渡された値を、`[SupplyParameterFromQuery]` 属性が付いているプロパティに受け取っています。
+    ///		</pre>
+	/// </summary>
+	/// <returns></returns>
+	protected override async Task OnParametersSetAsync()
+	{
+		await base.OnParametersSetAsync();
+
+        System.Console.WriteLine($"[{DateTime.Now}][ＦruitsSelectionExamplePage.razor > ＯnParametersSetAsync]　りんごを持っているか？: {this.AppleStr}");
+        System.Console.WriteLine($"[{DateTime.Now}][ＦruitsSelectionExamplePage.razor > ＯnParametersSetAsync]　バナナを持っているか？: {this.BananaStr}");
+        System.Console.WriteLine($"[{DateTime.Now}][ＦruitsSelectionExamplePage.razor > ＯnParametersSetAsync]　さくらんぼを持っているか？: {this.CherryStr}");
+    }
+}

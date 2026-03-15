@@ -2,7 +2,7 @@
 
 /// <summary>
 ///     <pre>
-/// ［Bad Know-how/Good wrapper > Collection］　果物の選択。
+/// 果物の選択。
 ///     </pre>
 /// </summary>
 public record MuzFruitsSelection

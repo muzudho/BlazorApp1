@@ -62,12 +62,14 @@
 
 
 	/// <summary>
-	/// 呼び出されない。
+	///		<pre>
+	///	- `App.razor` の `<Routes @rendermode="InteractiveServer" />` がないと、このメソッドは呼び出されないぜ（＾～＾）
+	///		</pre>
 	/// </summary>
 	/// <param name="firstRender"></param>
 	protected override void OnAfterRender(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]　✖　このサンプルでは、呼び出されません。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]");
 		base.OnAfterRender(firstRender);
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End]");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
@@ -75,13 +77,15 @@
 
 
 	/// <summary>
-	/// 呼び出されない。
+	///		<pre>
+	///	- `App.razor` の `<Routes @rendermode="InteractiveServer" />` がないと、このメソッドは呼び出されないぜ（＾～＾）
+	///		</pre>
 	/// </summary>
 	/// <param name="firstRender"></param>
 	/// <returns></returns>
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]　✖　このサンプルでは、呼び出されません。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]");
 		await base.OnAfterRenderAsync(firstRender);
 
 		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。

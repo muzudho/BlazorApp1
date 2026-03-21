@@ -18,42 +18,66 @@
 	// ========================================
 
 
+	/// <summary>
+	/// 画面を開いたときに最初に呼び出されるメソッドだぜ（＾～＾）
+	/// </summary>
 	protected override void OnInitialized()
 	{
 		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin]");
 		base.OnInitialized();
+
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
+		Thread.Sleep(10 * 1000);
+
 		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End]");
 		this.Message1 = $"OnInitialized() が呼び出されました。({DateTime.Now})";
 	}
 
 
+	/// <summary>
+	/// `OnInitialized()` が終わってから呼び出されるメソッドだぜ（＾～＾）
+	/// </summary>
+	/// <returns></returns>
 	protected override async Task OnInitializedAsync()
 	{
 		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin]");
 		await base.OnInitializedAsync();
 
-		await Task.Delay(5000);   // ここで何か時間のかかる処理をしてみる。
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
+		await Task.Delay(3 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
 		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End]");
 		this.Message2 = $"OnInitializedAsync() が呼び出されました。({DateTime.Now})";
 	}
 
 
+	/// <summary>
+	/// `OnInitializedAsync()` が終わってから呼び出されるメソッドだぜ（＾～＾）
+	/// </summary>
 	protected override void OnParametersSet()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin]　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
 		base.OnParametersSet();
+
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet()]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Thread.Sleep(10 * 1000);   // ここで何か時間のかかる処理をしてみる。
+
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End]");
 		this.Message3 = $"OnParametersSet() が呼び出されました。({DateTime.Now})";
 	}
 
 
+	/// <summary>
+	/// `OnParametersSet()` が終わってから呼び出されるメソッドだぜ（＾～＾）
+	/// </summary>
+	/// <returns></returns>
 	protected override async Task OnParametersSetAsync()
 	{
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin]");
 		await base.OnParametersSetAsync();
 
-		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()]　ここで何か時間のかかる処理をしてみる。");
+		await Task.Delay(5 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End]");
 		this.Message4 = $"OnParametersSetAsync() が呼び出されました。({DateTime.Now})";
@@ -63,6 +87,7 @@
 	/// <summary>
 	///		<pre>
 	///	- `App.razor` の `<Routes @rendermode="InteractiveServer" />` がないと、このメソッドは呼び出されないぜ（＾～＾）
+	/// - `OnInitialized()` が終わったあとに呼び出されるメソッドだぜ（＾～＾）
 	///		</pre>
 	/// </summary>
 	/// <param name="firstRender"></param>
@@ -70,6 +95,10 @@
 	{
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]");
 		base.OnAfterRender(firstRender);
+
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Thread.Sleep(10 * 1000);
+
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End]");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
 	}
@@ -78,6 +107,7 @@
 	/// <summary>
 	///		<pre>
 	///	- `App.razor` の `<Routes @rendermode="InteractiveServer" />` がないと、このメソッドは呼び出されないぜ（＾～＾）
+	/// - `OnAfterRender()` が終わったあとに呼び出されるメソッドだぜ（＾～＾）
 	///		</pre>
 	/// </summary>
 	/// <param name="firstRender"></param>
@@ -87,7 +117,8 @@
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]");
 		await base.OnAfterRenderAsync(firstRender);
 
-		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)]　ここで何か時間のかかる処理をしてみる。");
+		await Task.Delay(7 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
 		if (firstRender)
 		{

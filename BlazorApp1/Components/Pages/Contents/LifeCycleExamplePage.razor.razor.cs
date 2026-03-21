@@ -14,4 +14,5 @@ public partial class LifeCycleExamplePage
     private string Message3 { get; set; } = string.Empty;
     private string Message4 { get; set; } = string.Empty;
     private string Message5 { get; set; } = string.Empty;
+    private string Message6 { get; set; } = string.Empty;
 }

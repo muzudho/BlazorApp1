@@ -23,13 +23,13 @@
 	/// </summary>
 	protected override void OnInitialized()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		base.OnInitialized();
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
 		Thread.Sleep(10 * 1000);
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message1 = $"OnInitialized() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -40,13 +40,13 @@
 	/// <returns></returns>
 	protected override async Task OnInitializedAsync()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		await base.OnInitializedAsync();
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
 		await Task.Delay(3 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message2 = $"OnInitializedAsync() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -56,13 +56,13 @@
 	/// </summary>
 	protected override void OnParametersSet()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin]　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
 		base.OnParametersSet();
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet()]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		Thread.Sleep(10 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message3 = $"OnParametersSet() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -73,13 +73,13 @@
 	/// <returns></returns>
 	protected override async Task OnParametersSetAsync()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		await base.OnParametersSetAsync();
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()]　ここで何か時間のかかる処理をしてみる。");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
 		await Task.Delay(5 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message4 = $"OnParametersSetAsync() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -93,13 +93,13 @@
 	/// <param name="firstRender"></param>
 	protected override void OnAfterRender(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		base.OnAfterRender(firstRender);
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		Thread.Sleep(10 * 1000);
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 
@@ -114,19 +114,19 @@
 	/// <returns></returns>
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		await base.OnAfterRenderAsync(firstRender);
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)]　ここで何か時間のかかる処理をしてみる。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
 		await Task.Delay(7 * 1000);   // ここで何か時間のかかる処理をしてみる。
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]　初回レンダリングだよ〜");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]　初回レンダリングだよ〜");
 			// ここにJSInteropとかDOM触る処理を書く
 		}
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 }

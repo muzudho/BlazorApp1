@@ -105,13 +105,15 @@
 	/// <param name="firstRender"></param>
 	protected override void OnAfterRender(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟9　開始。");
+		this.NumberOfAfterRender++;
+		var count = this.NumberOfAfterRender;
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟9（{count}回目）　開始。");
 		base.OnAfterRender(firstRender);
 
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟10　終了。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟10（{count}回目）　終了。");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 
@@ -126,7 +128,9 @@
 	/// <returns></returns>
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟11　開始。");
+		this.NumberOfAfterRenderAsync++;
+		var count = this.NumberOfAfterRenderAsync++;
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟11（{count}回目）　開始。");
 		await base.OnAfterRenderAsync(firstRender);
 
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
@@ -143,7 +147,7 @@
 			// ここにJSInteropとかDOM触る処理を書く
 		}
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟12　終了。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟12（{count}回目）　終了。");
 		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 }

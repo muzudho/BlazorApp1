@@ -2,6 +2,8 @@
 
 <h3>［ライフサイクル・メソッド］の例</h3>
 
+<p>メッセージ１： @Message1</p>
+
 @code {
 
 
@@ -12,48 +14,58 @@
 
 	protected override void OnInitialized()
 	{
-		Console.WriteLine("[OnInitialized() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin]");
 		base.OnInitialized();
-		Console.WriteLine("[OnInitialized() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End]");
+		this.Message1 = $"OnInitialized() が呼び出されました。({DateTime.Now})";
 	}
 
 
 	protected override async Task OnInitializedAsync()
 	{
-		Console.WriteLine("[OnInitializedAsync() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin]");
 		await base.OnInitializedAsync();
-		Console.WriteLine("[OnInitializedAsync() > End]");
+
+		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End]");
 	}
 
 
 	protected override void OnParametersSet()
 	{
-		Console.WriteLine("[OnParametersSet() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin]");
 		base.OnParametersSet();
-		Console.WriteLine("[OnParametersSet() > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End]");
 	}
 
 
 	protected override async Task OnParametersSetAsync()
 	{
-		Console.WriteLine("[OnParametersSetAsync() > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin]");
 		await base.OnParametersSetAsync();
-		Console.WriteLine("[OnParametersSetAsync() > End]");
+
+		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End]");
 	}
 
 
 	protected override void OnAfterRender(bool firstRender)
 	{
-		Console.WriteLine("[OnAfterRender(firstRender) > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]");
 		base.OnAfterRender(firstRender);
-		Console.WriteLine("[OnAfterRender(firstRender) > End]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End]");
 	}
 
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine("[OnAfterRenderAsync(firstRender) > Begin]");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]");
 		await base.OnAfterRenderAsync(firstRender);
-		Console.WriteLine("[OnAfterRenderAsync(firstRender) > End]");
+
+		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End]");
 	}
 }

@@ -1,0 +1,92 @@
+﻿@page "/life-cycle-apple-example"
+
+<h3>［ライフサイクル・メソッド］の例</h3>
+<h4>`OnAfterRender*()` が呼び出されないケース</h4>
+
+<p>りんご： @Apple</p>
+<p>メッセージ1： @Message1</p>
+<p>メッセージ2： @Message2</p>
+<p>メッセージ3： @Message3</p>
+<p>メッセージ4： @Message4</p>
+<p>メッセージ5： @Message5</p>
+<p>メッセージ6： @Message6</p>
+
+@code {
+
+
+	// ========================================
+	// ライフサイクル・メソッド
+	// ========================================
+
+
+	protected override void OnInitialized()
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin]");
+		base.OnInitialized();
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End]");
+		this.Message1 = $"OnInitialized() が呼び出されました。({DateTime.Now})";
+	}
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin]");
+		await base.OnInitializedAsync();
+
+		await Task.Delay(5000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End]");
+		this.Message2 = $"OnInitializedAsync() が呼び出されました。({DateTime.Now})";
+	}
+
+
+	protected override void OnParametersSet()
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin]");
+		base.OnParametersSet();
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End]");
+		this.Message3 = $"OnParametersSet() が呼び出されました。({DateTime.Now})";
+	}
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin]");
+		await base.OnParametersSetAsync();
+
+		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End]");
+		this.Message4 = $"OnParametersSetAsync() が呼び出されました。({DateTime.Now})";
+	}
+
+
+	/// <summary>
+	/// 呼び出されない。
+	/// </summary>
+	/// <param name="firstRender"></param>
+	protected override void OnAfterRender(bool firstRender)
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin]　✖　このサンプルでは、呼び出されません。");
+		base.OnAfterRender(firstRender);
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End]");
+		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
+	}
+
+
+	/// <summary>
+	/// 呼び出されない。
+	/// </summary>
+	/// <param name="firstRender"></param>
+	/// <returns></returns>
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]　✖　このサンプルでは、呼び出されません。");
+		await base.OnAfterRenderAsync(firstRender);
+
+		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
+
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End]");
+		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
+	}
+}

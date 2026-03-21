@@ -4,4 +4,50 @@
 
 @code {
 
+
+	// ========================================
+	// ライフサイクル・メソッド
+	// ========================================
+
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		Console.WriteLine("OnInitialized()");
+	}
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		Console.WriteLine("OnInitializedAsync()");
+	}
+
+
+	protected override void OnParametersSet()
+	{
+		base.OnParametersSet();
+		Console.WriteLine("OnParametersSet()");
+	}
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		await base.OnParametersSetAsync();
+		Console.WriteLine("OnParametersSetAsync()");
+	}
+
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		base.OnAfterRender(firstRender);
+		Console.WriteLine("OnAfterRender(firstRender)");
+	}
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await base.OnAfterRenderAsync(firstRender);
+		Console.WriteLine("OnAfterRenderAsync(firstRender)");
+	}
 }

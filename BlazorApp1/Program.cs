@@ -2,7 +2,6 @@ using BlazorApp1.Components;
 using BlazorApp1.Src;
 using BlazorApp1.Src.Infrastructure.Configuration;
 using HelloConsoleAppCSharp.Src.Infrastructure.Logging;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 try
@@ -29,6 +28,10 @@ try
             loggingSvc.Others.LogInformation("その他のログだぜ（＾～＾）");
             loggingSvc.Verbose.LogInformation("大量のログだぜ（＾～＾）");
 
+
+            // ［ウェブアプリケーションの設定］
+
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -52,3 +55,11 @@ catch (Exception ex)
 {
     Console.WriteLine($"アプリが死んだ... ログも取れない、むずでょ泣く。{ex}");
 }
+finally
+{
+    Console.WriteLine("アプリが終了するぜ（＾～＾）！");
+    await MuzInfrastructureHelper.Cleanup();
+}
+
+// Program.cs を最後まで実行しても、必ずしもアプリケーションが終了するわけじゃないぜ（＾～＾）！
+// ［汎用ホスト］が動いている限りは、アプリケーションは終了しないぜ（＾～＾）！

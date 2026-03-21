@@ -15,7 +15,10 @@
 </head>
 
 <body>
-    <Routes />
+    @*
+     * `@rendermode="InteractiveServer"` - Blazor Server アプリケーションで必要。これがないと、`OnAfterRenderAsync(firstRender)` メソッドが呼び出されなかったり、 `@onclick` などのイベントが動作しない。
+     *@
+    <Routes @rendermode="InteractiveServer" />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>

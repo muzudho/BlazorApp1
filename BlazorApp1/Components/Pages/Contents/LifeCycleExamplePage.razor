@@ -85,6 +85,12 @@
 
 		await Task.Delay(1000);   // ここで何か時間のかかる処理をしてみる。
 
+		if (firstRender)
+		{
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin]　初回レンダリングだよ〜");
+			// ここにJSInteropとかDOM触る処理を書く
+		}
+
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End]");
 		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
 	}

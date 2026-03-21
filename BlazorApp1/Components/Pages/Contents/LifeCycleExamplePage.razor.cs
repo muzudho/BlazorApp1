@@ -16,6 +16,12 @@ public partial class LifeCycleExamplePage
     private string Message5 { get; set; } = string.Empty;
     private string Message6 { get; set; } = string.Empty;
 
+
+    // ========================================
+    // 内部プロパティ
+    // ========================================
+
+
     private int NumberOfAfterRender { get; set; }
     private int NumberOfAfterRenderAsync { get; set; }
 }

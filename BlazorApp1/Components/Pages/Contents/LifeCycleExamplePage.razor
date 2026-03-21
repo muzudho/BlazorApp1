@@ -1,4 +1,5 @@
 ﻿@page "/life-cycle-example"
+
 @using BlazorApp1.Src.Infrastructure.Study
 @using System.Threading.Tasks
 
@@ -83,6 +84,7 @@
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟7　開始。");
 		await base.OnParametersSetAsync();
 
+		// XXX: ここで時間のかかる処理をすると、そのブロック解除後に余分に `OnAfterRender*()` が呼び出されるケースがあるぜ（＾～＾）
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
 		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
 			seconds: 5,
@@ -100,6 +102,7 @@
 	///		<pre>
 	///	- `App.razor` の `<Routes @rendermode="InteractiveServer" />` がないと、このメソッドは呼び出されないぜ（＾～＾）
 	/// - `OnInitialized()` 、または `OnParametersSetAsync()` が動いているときはそれが、終わってから呼び出されるメソッドだぜ（＾～＾）
+	/// - `OnParametersSetAsync()` でブロック時間が長いとき、そのブロッが解除されたタイミングで、余分にこの `OnAfterRender*(firstRender = false)` が呼び出されるケースがあるぜ（＾～＾）
 	///		</pre>
 	/// </summary>
 	/// <param name="firstRender"></param>
@@ -129,7 +132,7 @@
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		this.NumberOfAfterRenderAsync++;
-		var count = this.NumberOfAfterRenderAsync++;
+		var count = this.NumberOfAfterRenderAsync;
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟11（{count}回目）　開始。");
 		await base.OnAfterRenderAsync(firstRender);
 

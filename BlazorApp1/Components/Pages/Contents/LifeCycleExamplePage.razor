@@ -43,7 +43,7 @@
 	/// <returns></returns>
 	protected override async Task OnInitializedAsync()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜サ＞始。");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜た＞始。");
 		await base.OnInitializedAsync();
 
 		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
@@ -54,7 +54,7 @@
 				Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
 			});
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜サ＞終。");
+		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜た＞終。");
 		this.Message2 = $"OnInitializedAsync() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -64,13 +64,13 @@
 	/// </summary>
 	protected override void OnParametersSet()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜い＞始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜ち＞始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
 		base.OnParametersSet();
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜い＞終。");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜ち＞終。");
 		this.Message3 = $"OnParametersSet() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -81,7 +81,7 @@
 	/// <returns></returns>
 	protected override async Task OnParametersSetAsync()
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜ス＞始。");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜つ＞始。");
 		await base.OnParametersSetAsync();
 
 		// XXX: ここで時間のかかる処理をすると、そのブロック解除後に余分に `OnAfterRender*()` が呼び出されるケースがあるぜ（＾～＾）
@@ -93,7 +93,7 @@
 				Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
 			});
 
-		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜ス＞終。");
+		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■＜つ＞終。");
 		this.Message4 = $"OnParametersSetAsync() が呼び出されました。({DateTime.Now})";
 	}
 
@@ -117,7 +117,7 @@
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟🌟＜う＞始（{count}回目）　開始。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟🌟＜ヤ＞始（{count}回目）　開始。");
 		}
 
 		base.OnAfterRender(firstRender);
@@ -131,7 +131,7 @@
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜う＞終（{count}回目）　終了。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜ヤ＞終（{count}回目）　終了。");
 		}
 
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
@@ -153,11 +153,11 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜シ＞始（{count}回目）　開始。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜い＞始（{count}回目）　開始。");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜セ＞始（{count}回目）　開始。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟＜ユ＞始（{count}回目）　開始。");
 		}
 
 		await base.OnAfterRenderAsync(firstRender);
@@ -178,11 +178,11 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜シ＞終（{count}回目）　終了。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜い＞終（{count}回目）　終了。");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜セ＞終（{count}回目）　終了。");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■＜ユ＞終（{count}回目）　終了。");
 		}
 		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
 	}

@@ -105,13 +105,13 @@
 	/// <param name="firstRender"></param>
 	protected override void OnAfterRender(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟9　開始。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟9　開始。");
 		base.OnAfterRender(firstRender);
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟10　終了。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟10　終了。");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 
@@ -126,24 +126,24 @@
 	/// <returns></returns>
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟11　開始。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟11　開始。");
 		await base.OnAfterRenderAsync(firstRender);
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
 		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
 			seconds: 7,
 			onTicked: async () =>
 			{
-				Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+				Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　Tick");
 			});
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > Begin][CSR:{this.RendererInfo.IsInteractive}]　初回レンダリングだよ〜");
+			Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　初回レンダリングだよ〜");
 			// ここにJSInteropとかDOM触る処理を書く
 		}
 
-		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟12　終了。");
+		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　🌟12　終了。");
 		this.Message6 = $"OnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";
 	}
 }

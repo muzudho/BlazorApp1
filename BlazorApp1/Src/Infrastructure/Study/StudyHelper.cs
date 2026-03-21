@@ -9,7 +9,10 @@ public static class StudyHelper
         int seconds,
         Action onTime)
     {
-        Thread.Sleep(seconds * 1000);   // ここで何か時間のかかる処理をしてみる。デッドロックが発生する可能性があり、良くないが、簡単にコードを書けるので使う。
-        onTime();
+        for (int i=0; i<seconds; i++)
+        {
+            Thread.Sleep(1000);   // ここで何か１秒かかる処理をしてみる。デッドロックが発生する可能性があり、良くないが、簡単にコードを書けるので使う。
+            onTime();
+        }
     }
 }

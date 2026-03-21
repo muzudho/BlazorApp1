@@ -1,4 +1,5 @@
 ﻿@page "/life-cycle-example"
+@using BlazorApp1.Src.Infrastructure.Study
 
 <h3>［ライフサイクル・メソッド］の例</h3>
 <h4>`OnAfterRender*()` が呼び出されないケース</h4>
@@ -26,8 +27,13 @@
 		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]");
 		base.OnInitialized();
 
-		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
-		Thread.Sleep(10 * 1000);
+		Console.WriteLine($"[{DateTime.Now}][OnInitialized()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 10,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnInitialized()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		Console.WriteLine($"[{DateTime.Now}][OnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message1 = $"OnInitialized() が呼び出されました。({DateTime.Now})";
@@ -44,7 +50,12 @@
 		await base.OnInitializedAsync();
 
 		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
-		await Task.Delay(3 * 1000);   // ここで何か時間のかかる処理をしてみる。
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 3,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		Console.WriteLine($"[{DateTime.Now}][OnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message2 = $"OnInitializedAsync() が呼び出されました。({DateTime.Now})";
@@ -60,7 +71,12 @@
 		base.OnParametersSet();
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
-		Thread.Sleep(10 * 1000);   // ここで何か時間のかかる処理をしてみる。
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 10,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message3 = $"OnParametersSet() が呼び出されました。({DateTime.Now})";
@@ -77,7 +93,12 @@
 		await base.OnParametersSetAsync();
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
-		await Task.Delay(5 * 1000);   // ここで何か時間のかかる処理をしてみる。
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 5,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		Console.WriteLine($"[{DateTime.Now}][OnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message4 = $"OnParametersSetAsync() が呼び出されました。({DateTime.Now})";
@@ -97,7 +118,12 @@
 		base.OnAfterRender(firstRender);
 
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
-		Thread.Sleep(10 * 1000);
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 10,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRender(firstRender) > End][CSR:{this.RendererInfo.IsInteractive}]");
 		this.Message5 = $"OnAfterRender(firstRender) が呼び出されました。({DateTime.Now})";
@@ -118,7 +144,12 @@
 		await base.OnAfterRenderAsync(firstRender);
 
 		Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
-		await Task.Delay(7 * 1000);   // ここで何か時間のかかる処理をしてみる。
+		StudyHelper.BadTimer(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 7,
+			onTime: () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][OnAfterRenderAsync(firstRender)][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		if (firstRender)
 		{

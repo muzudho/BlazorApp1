@@ -24,6 +24,20 @@ public partial class LifeCycleExamplePage
     // ========================================
 
 
+    // ［ライフサイクル・メソッドのフロー］
+
+
+    private bool HasParametersSetAsync { get; set; }
+
+    /// <summary>
+    /// パラメーターを使った初期化完了時。
+    /// </summary>
+    private bool IsReady { get; set; }
+
+
+    // ［その他］
+
+
     private string PrePhaseStart { get; set; } = string.Empty;
     private string PrePhaseEnd { get; set; } = string.Empty;
     private int NumberOfAfterRender { get; set; }

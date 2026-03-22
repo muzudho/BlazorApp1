@@ -1,4 +1,6 @@
-﻿namespace BlazorApp1.Models;
+﻿namespace BlazorApp1.Models.Fruits;
+
+using BlazorApp1.Models;
 
 /// <summary>
 ///     <pre>

@@ -1,6 +1,4 @@
 ﻿namespace BlazorApp1.Models;
-
-
 /// <summary>
 ///     <pre>
 /// タスクの進捗

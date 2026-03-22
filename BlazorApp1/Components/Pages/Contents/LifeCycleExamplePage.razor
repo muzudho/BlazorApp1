@@ -28,21 +28,37 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　✖【お】始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【お】始。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【お】始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【お】始。
+----------------------------------------
+");
 		}
 		await base.SetParametersAsync(parameterView);
 
 		if (!this.RendererInfo.IsInteractive)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　✖【お】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【お】終。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■【お】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【お】終。
+----------------------------------------
+");
 		}
 	}
 
@@ -55,25 +71,45 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【あ】始。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【あ】始。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【か】始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【か】始。
+----------------------------------------
+");
 		}
 		base.OnInitialized();
 
-		Console.WriteLine($"[{DateTime.Now}][ＯnInitialized()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
+		Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized()][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+このメソッドは同期なんで、邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）
+----------------------------------------
+");
 		StudyHelper.BadSleep(seconds: 10);	// ここで何か時間のかかる処理をしてみる。
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]　【あ】終。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+【あ】終。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]　【か】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+【か】終。
+----------------------------------------
+");
 		}
 		this.Message1 = $"ＯnInitialized() が呼び出されました。({DateTime.Now})";
 	}
@@ -88,30 +124,46 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【い】始。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【い】始。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【き】始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【き】始。
+----------------------------------------
+");
 		}
 		await base.OnInitializedAsync();
 
-		Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
-		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
-			seconds: 3,
-			onTicked: async () =>
-			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
-			});
+		// Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
+		// await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
+		// 	seconds: 3,
+		// 	onTicked: async () =>
+		// 	{
+		// 		Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+		// 	});
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■【い】終。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【い】終。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■【き】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【き】終。
+----------------------------------------
+");
 		}
 		this.Message2 = $"ＯnInitializedAsync() が呼び出されました。({DateTime.Now})";
 	}
@@ -125,25 +177,41 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【う】始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【う】始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【く】始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【く】始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）
+----------------------------------------
+");
 		}
 		base.OnParametersSet();
 
-		Console.WriteLine($"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
 		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]　■【う】終。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【う】終。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]　■【く】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【く】終。
+----------------------------------------
+");
 		}
 		this.Message3 = $"ＯnParametersSet() が呼び出されました。({DateTime.Now})";
 	}
@@ -158,17 +226,25 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【え】始。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【え】始。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【け】始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【け】始。
+----------------------------------------
+");
 		}
 
 		await base.OnParametersSetAsync();
 
 		// XXX: ここで時間のかかる処理をすると、そのブロック解除後に余分に `OnAfterRender*()` が呼び出されるケースがあるぜ（＾～＾）
-		Console.WriteLine($"[{DateTime.Now}][ＯnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
+		Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSetAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
 		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
 			seconds: 5,
 			onTicked: async () =>
@@ -179,11 +255,19 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■【え】終。");
+			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【え】終。
+----------------------------------------
+");
 		}
 		else
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]　■【け】終。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【け】終。
+----------------------------------------
+");
 		}
 		this.Message4 = $"ＯnParametersSetAsync() が呼び出されました。({DateTime.Now})";
 	}
@@ -204,21 +288,37 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【こ】始（{count}回目）　開始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【こ】始（{count}回目）　開始。
+----------------------------------------
+");
 		}
 		else
 		{
 			if (count == 2)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【し】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【し】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 			else if (count == 3)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【せ】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【せ】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 			else
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　✖【しせ】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【しせ】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 		}
 
@@ -229,21 +329,37 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【こ】終（{count}回目）　終了。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【こ】終（{count}回目）　終了。
+----------------------------------------
+");
 		}
 		else
 		{
 			if (count == 2)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【し】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【し】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 			else if (count == 3)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【せ】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【せ】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 			else
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　✖【しせ】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【しせ】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 		}
 
@@ -266,21 +382,37 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【さ】始（{count}回目）　開始。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【さ】始（{count}回目）　開始。
+----------------------------------------
+");
 		}
 		else
 		{
 			if (count == 2)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【す】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【す】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 			else if (count == 3)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　🌟【そ】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+🌟【そ】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 			else
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　✖【すそ】始（{count}回目）　開始。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【すそ】始（{count}回目）　開始。
+----------------------------------------
+");
 			}
 		}
 
@@ -302,21 +434,37 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【さ】終（{count}回目）　終了。");
+			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【さ】終（{count}回目）　終了。
+----------------------------------------
+");
 		}
 		else
 		{
 			if (count == 2)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【す】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【す】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 			else if (count == 3)
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　■【そ】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+■【そ】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 			else
 			{
-				Console.WriteLine($"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　✖【すそ】終（{count}回目）　終了。");
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+----------------------------------------
+✖【すそ】終（{count}回目）　終了。
+----------------------------------------
+");
 			}
 		}
 		this.Message6 = $"ＯnAfterRenderAsync(firstRender) が呼び出されました。({DateTime.Now})";

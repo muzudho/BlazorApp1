@@ -22,7 +22,8 @@ public partial class LifeCycleExamplePage
     // ========================================
 
 
-    private string PreEndPhaseEnd { get; set; } = string.Empty;
+    private string PrePhaseStart { get; set; } = string.Empty;
+    private string PrePhaseEnd { get; set; } = string.Empty;
     private int NumberOfAfterRender { get; set; }
     private int NumberOfAfterRenderAsync { get; set; }
 }

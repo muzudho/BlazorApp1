@@ -3,6 +3,7 @@
 @using BlazorApp1.Src.Infrastructure.Study
 @using System.Threading.Tasks
 @using HelloConsoleAppCSharp.Src.Infrastructure.Logging
+@using System.Diagnostics
 
 @inject IMuzLoggingService LoggingSvc
 
@@ -28,37 +29,54 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			if (!string.IsNullOrWhiteSpace(this.PreEndPhaseEnd))
+			{
+				throw new UnreachableException($"前フェーズ終は空でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
+
+			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【お】始
+🌟【ア】始
 ----------------------------------------
 ");
 		}
 		else
 		{
+			if (!string.IsNullOrWhiteSpace(this.PreEndPhaseEnd))
+			{
+				throw new UnreachableException($"前フェーズ終は空でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
+
 			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 🌟【お】始
 ----------------------------------------
 ");
 		}
+
 		await base.SetParametersAsync(parameterView);
 
 		if (!this.RendererInfo.IsInteractive)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【お】終
+【ア】終
 ----------------------------------------
 ");
+			this.PreEndPhaseEnd = "ア";
 		}
 		else
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+			var msg = $@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 ■【お】終
 ----------------------------------------
-");
+";
+			Console.WriteLine(msg);
+			this.LoggingSvc.Others.LogDebug(msg);
+			this.PreEndPhaseEnd = "お";
 		}
 	}
 
@@ -70,8 +88,13 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
+			if (this.PreEndPhaseEnd != "ア")
+			{
+				throw new UnreachableException($"前フェーズ終は［ア］でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
+
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 🌟【あ】始
 ----------------------------------------
@@ -93,11 +116,12 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 【あ】終
 ----------------------------------------
 ");
+			this.PreEndPhaseEnd = "あ";
 		}
 		else
 		{
@@ -119,8 +143,12 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
+			if (this.PreEndPhaseEnd != "あ")
+			{
+				throw new UnreachableException($"前フェーズ終は［あ］でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 🌟【い】始
 ----------------------------------------
@@ -136,22 +164,23 @@
 		}
 		await base.OnInitializedAsync();
 
-		// Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
-		// await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
-		// 	seconds: 3,
-		// 	onTicked: async () =>
-		// 	{
-		// 		Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
-		// 	});
+		Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　OnInitialized() で止まってても、 OnAfterRender(), OnAfterRenderAsync() は始まるぜ（＾～＾）");
+		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 11, //3,
+			onTicked: async () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 ■【い】終
 ----------------------------------------
 ");
+			this.PreEndPhaseEnd = "い";
 		}
 		else
 		{
@@ -172,8 +201,13 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
+			if (this.PreEndPhaseEnd != "い")
+			{
+				throw new UnreachableException($"前フェーズ終は［い］でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
+
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnParametersSet() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 🌟【う】始。　`OnInitializedAsync()` が終わったはずだぜ（＾～＾）
 ----------------------------------------
@@ -189,17 +223,26 @@
 		}
 		base.OnParametersSet();
 
-		// Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
-		// StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
+		if (!this.RendererInfo.IsInteractive)
+		{
+			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+			StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
+		}
+		else
+		{
+			// Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+			// StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
+		}
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 ■【う】終
 ----------------------------------------
 ");
+			this.PreEndPhaseEnd = "う";
 		}
 		else
 		{
@@ -221,8 +264,13 @@
 	{
 		if (!this.RendererInfo.IsInteractive)
 		{
+			if (this.PreEndPhaseEnd != "う")
+			{
+				throw new UnreachableException($"前フェーズ終は［う］でなければいけません。 PrePhaseEnd = {this.PreEndPhaseEnd}");
+			}
+
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 🌟【え】始
 ----------------------------------------
@@ -251,11 +299,12 @@
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
-			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
+			this.LoggingSvc.Others.LogDebug($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
 ■【え】終
 ----------------------------------------
 ");
+			this.PreEndPhaseEnd = "え";
 		}
 		else
 		{

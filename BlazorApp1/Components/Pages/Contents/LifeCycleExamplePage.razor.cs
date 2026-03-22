@@ -1,5 +1,6 @@
 ﻿namespace BlazorApp1.Components.Pages.Contents;
 
+using BlazorApp1.Infrastructure.ComponentParts;
 using BlazorApp1.Models;
 
 public partial class LifeCycleExamplePage
@@ -27,12 +28,10 @@ public partial class LifeCycleExamplePage
     // ［ライフサイクル・メソッドのフロー］
 
 
-    private bool HasParametersSetAsync { get; set; }
-
     /// <summary>
-    /// パラメーターを使った初期化完了時。
+    /// ［ライフサイクル・メソッドのフロー］を補うモデル。
     /// </summary>
-    private bool IsReady { get; set; }
+    private MuzLifeCycleModel LifeCycle { get; init; } = new MuzLifeCycleModel();
 
 
     // ［その他］

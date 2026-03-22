@@ -328,7 +328,7 @@
 ■【け】終
 ----------------------------------------
 ");
-			this.HasParametersSetAsync = true;
+			this.LifeCycle.HasParametersSetAsync = true;
 			this.PrePhaseEnd = "け";
 		}
 		this.Message4 = $"ＯnParametersSetAsync() が呼び出されました。({DateTime.Now})";
@@ -403,10 +403,10 @@
 		else
 		{
 			// `ParametersSetAsync()` が完了していれば、この `OnAfterRender(firstRender == false)` が呼び出されたときに［パラメーターを使った初期化］をするのに良いタイミングだぜ（＾～＾）
-			if (!this.IsReady && this.HasParametersSetAsync)
+			if (!this.LifeCycle.IsReady && this.LifeCycle.HasParametersSetAsync)
 			{
 				this.LoggingSvc.Others.LogDebug($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　🌟　［パラメーターを使った初期化］にちょうどよいタイミングだぜ（＾～＾）");
-				this.IsReady = true;
+				this.LifeCycle.IsReady = true;
 			}
 
 			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");

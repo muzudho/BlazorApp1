@@ -1,5 +1,7 @@
 ﻿namespace BlazorApp1.Components.Pages.Contents;
 
+using BlazorApp1.Models;
+
 public partial class LifeCycleExamplePage
 {
 

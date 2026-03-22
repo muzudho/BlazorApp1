@@ -58,6 +58,14 @@
 
 		await base.SetParametersAsync(parameterView);
 
+		Console.WriteLine($"[{DateTime.Now}][ＳetParametersAsync()][CSR:{this.RendererInfo.IsInteractive}]　ここで何か時間のかかる処理をしてみる。");
+		await StudyHelper.TimerAsync(   // ここで何か時間のかかる処理をしてみる。
+			seconds: 3,
+			onTicked: async () =>
+			{
+				Console.WriteLine($"[{DateTime.Now}][ＯnInitializedAsync()][CSR:{this.RendererInfo.IsInteractive}]　Tick");
+			});
+
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
@@ -103,9 +111,9 @@
 		}
 		else
 		{
-			if (!((string.IsNullOrWhiteSpace(this.PrePhaseStart) || this.PrePhaseStart == "お") && this.PrePhaseEnd == "お"))
+			if (!((string.IsNullOrWhiteSpace(this.PrePhaseStart) || this.PrePhaseStart == "お") && (string.IsNullOrWhiteSpace(this.PrePhaseEnd) || this.PrePhaseEnd == "お")))
 			{
-				throw new UnreachableException($"何も始まってないか［お］が始まっているかで、かつ、［お］が終わってからでなければいけません。 PrePhaseEnd = {this.PrePhaseEnd}, PrePhaseStart = {this.PrePhaseStart}");
+				throw new UnreachableException($"何も始まってないか［お］が始まっているかで、かつ、何も終わっていないか［お］が終わってからでなければいけません。 PrePhaseEnd = {this.PrePhaseEnd}, PrePhaseStart = {this.PrePhaseStart}");
 			}
 
 			Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
@@ -384,7 +392,9 @@
 		base.OnAfterRender(firstRender);
 
 		Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
-		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
+		StudyHelper.BadSleep(  // ここで何か時間のかかる処理をしてみる。
+			seconds: 10	//30
+		);
 
 		if (firstRender)
 		{

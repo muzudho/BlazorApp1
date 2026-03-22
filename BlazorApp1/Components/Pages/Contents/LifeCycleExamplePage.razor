@@ -30,7 +30,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【お】始。
+✖【お】始
 ----------------------------------------
 ");
 		}
@@ -38,7 +38,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【お】始。
+🌟【お】始
 ----------------------------------------
 ");
 		}
@@ -48,7 +48,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【お】終。
+✖【お】終
 ----------------------------------------
 ");
 		}
@@ -56,7 +56,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＳetParametersAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【お】終。
+■【お】終
 ----------------------------------------
 ");
 		}
@@ -73,7 +73,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【あ】始。
+🌟【あ】始
 ----------------------------------------
 ");
 		}
@@ -81,17 +81,13 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【か】始。
+🌟【か】始
 ----------------------------------------
 ");
 		}
 		base.OnInitialized();
 
-		Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized()][CSR:{this.RendererInfo.IsInteractive}]
-----------------------------------------
-このメソッドは同期なんで、邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）
-----------------------------------------
-");
+		Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで、邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾） 画面は前の画面のまま更新されないぜ（＾～＾）");
 		StudyHelper.BadSleep(seconds: 10);	// ここで何か時間のかかる処理をしてみる。
 
 		if (!this.RendererInfo.IsInteractive)
@@ -99,7 +95,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-【あ】終。
+【あ】終
 ----------------------------------------
 ");
 		}
@@ -107,7 +103,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnInitialized() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-【か】終。
+【か】終
 ----------------------------------------
 ");
 		}
@@ -126,7 +122,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【い】始。
+🌟【い】始
 ----------------------------------------
 ");
 		}
@@ -134,7 +130,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnInitializedAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【き】始。
+🌟【き】始
 ----------------------------------------
 ");
 		}
@@ -153,7 +149,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【い】終。
+■【い】終
 ----------------------------------------
 ");
 		}
@@ -161,7 +157,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnInitializedAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【き】終。
+■【き】終
 ----------------------------------------
 ");
 		}
@@ -193,15 +189,15 @@
 		}
 		base.OnParametersSet();
 
-		Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
-		StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
+		// Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet()][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");
+		// StudyHelper.BadSleep(seconds: 10);  // ここで何か時間のかかる処理をしてみる。
 
 		if (!this.RendererInfo.IsInteractive)
 		{
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【う】終。
+■【う】終
 ----------------------------------------
 ");
 		}
@@ -209,7 +205,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSet() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【く】終。
+■【く】終
 ----------------------------------------
 ");
 		}
@@ -228,7 +224,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【え】始。
+🌟【え】始
 ----------------------------------------
 ");
 		}
@@ -236,7 +232,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSetAsync() > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【け】始。
+🌟【け】始
 ----------------------------------------
 ");
 		}
@@ -257,7 +253,7 @@
 			// サーバーサイドで実行されるので、クライアントのコンソールには出ないぜ（＾～＾）
 			this.LoggingSvc.Others.LogInformation($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【え】終。
+■【え】終
 ----------------------------------------
 ");
 		}
@@ -265,7 +261,7 @@
 		{
 			Console.WriteLine($@"[{DateTime.Now}][ＯnParametersSetAsync() > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【け】終。
+■【け】終
 ----------------------------------------
 ");
 		}
@@ -288,11 +284,18 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			if(count == 1)
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【こ】始（{count}回目）　開始。
+🌟【こ】始
 ----------------------------------------
 ");
+			}
+			else
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　✖【こ】始（{count}回目）　開始。");
+			}
 		}
 		else
 		{
@@ -300,7 +303,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【し】始（{count}回目）　開始。
+🌟【し】始
 ----------------------------------------
 ");
 			}
@@ -308,7 +311,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【せ】始（{count}回目）　開始。
+🌟【せ】始
 ----------------------------------------
 ");
 			}
@@ -316,7 +319,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【しせ】始（{count}回目）　開始。
+✖【しせ】始（{count}回目）
 ----------------------------------------
 ");
 			}
@@ -329,11 +332,18 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+			if (count == 1)
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【こ】終（{count}回目）　終了。
+■【こ】終
 ----------------------------------------
 ");
+			}
+			else
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　✖【こ】終（{count}回目）　終了。");
+			}
 		}
 		else
 		{
@@ -341,7 +351,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【し】終（{count}回目）　終了。
+■【し】終
 ----------------------------------------
 ");
 			}
@@ -349,7 +359,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【せ】終（{count}回目）　終了。
+■【せ】終
 ----------------------------------------
 ");
 			}
@@ -382,11 +392,18 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
+			if (count == 1)
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【さ】始（{count}回目）　開始。
+🌟【さ】始
 ----------------------------------------
 ");
+			}
+			else
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]　✖【さ】始（{count}回目）　開始。");
+			}
 		}
 		else
 		{
@@ -394,7 +411,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【す】始（{count}回目）　開始。
+🌟【す】始
 ----------------------------------------
 ");
 			}
@@ -402,7 +419,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-🌟【そ】始（{count}回目）　開始。
+🌟【そ】始
 ----------------------------------------
 ");
 			}
@@ -410,7 +427,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > Begin][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【すそ】始（{count}回目）　開始。
+✖【すそ】始（{count}回目）
 ----------------------------------------
 ");
 			}
@@ -434,11 +451,18 @@
 
 		if (firstRender)
 		{
-			Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
+			if (count == 1)
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【さ】終（{count}回目）　終了。
+■【さ】終
 ----------------------------------------
 ");
+			}
+			else
+			{
+				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]　✖【さ】終（{count}回目）　終了。");
+			}
 		}
 		else
 		{
@@ -446,7 +470,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【す】終（{count}回目）　終了。
+■【す】終
 ----------------------------------------
 ");
 			}
@@ -454,7 +478,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-■【そ】終（{count}回目）　終了。
+■【そ】終
 ----------------------------------------
 ");
 			}
@@ -462,7 +486,7 @@
 			{
 				Console.WriteLine($@"[{DateTime.Now}][ＯnAfterRenderAsync(firstRender = {firstRender}) > End][CSR:{this.RendererInfo.IsInteractive}]
 ----------------------------------------
-✖【すそ】終（{count}回目）　終了。
+✖【すそ】終（{count}回目）
 ----------------------------------------
 ");
 			}

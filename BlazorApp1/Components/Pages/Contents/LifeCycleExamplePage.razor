@@ -8,8 +8,8 @@
 @inject IMuzLoggingService LoggingSvc
 
 <h3>［ライフサイクル・メソッド］の例</h3>
-<h4>`OnAfterRender*()` が呼び出されないケース</h4>
 
+<p>初期化済み： @LifeCycle.IsReady</p>
 <p>メッセージ1： @Message1</p>
 <p>メッセージ2： @Message2</p>
 <p>メッセージ3： @Message3</p>
@@ -405,7 +405,9 @@
 			// `ParametersSetAsync()` が完了していれば、この `OnAfterRender(firstRender == false)` が呼び出されたときに［パラメーターを使った初期化］をするのに良いタイミングだぜ（＾～＾）
 			if (!this.LifeCycle.IsReady && this.LifeCycle.HasParametersSetAsync)
 			{
-				this.LoggingSvc.Others.LogDebug($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　🌟　［パラメーターを使った初期化］にちょうどよいタイミングだぜ（＾～＾）");
+				var msg = $"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　🌟　［パラメーターを使った初期化］にちょうどよいタイミングだぜ（＾～＾）";
+				Console.WriteLine(msg);
+				this.LoggingSvc.Others.LogDebug(msg);
 				this.LifeCycle.IsReady = true;
 			}
 

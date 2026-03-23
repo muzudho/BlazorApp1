@@ -409,6 +409,7 @@
 				Console.WriteLine(msg);
 				this.LoggingSvc.Others.LogDebug(msg);
 				this.LifeCycle.IsReady = true;
+				this.StateHasChanged();	// Ready に変わった状態を再レンダー。
 			}
 
 			Console.WriteLine($"[{DateTime.Now}][ＯnAfterRender(firstRender = {firstRender})][CSR:{this.RendererInfo.IsInteractive}]　このメソッドは同期なんで邪魔が入らない（＾～＾）　ここで時間がかかると、他の処理も全部止まるぜ（＾～＾）");

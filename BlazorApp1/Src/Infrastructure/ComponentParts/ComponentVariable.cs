@@ -1,4 +1,4 @@
-﻿namespace BlazorApp1.Models;
+﻿namespace BlazorApp1.Infrastructure.ComponentParts;
 
 using System.Threading.Tasks;
 
@@ -7,7 +7,19 @@ public class ComponentVariable<S, R>
 
 
     // ========================================
-    // プロパティ
+    // 生成／破棄
+    // ========================================
+
+
+    public ComponentVariable(R result)
+    {
+        this.Default = result;
+        this.Result = result;
+    }
+
+
+    // ========================================
+    // 窓口プロパティ
     // ========================================
 
 
@@ -42,19 +54,7 @@ public class ComponentVariable<S, R>
 
 
     // ========================================
-    // 生成／破棄
-    // ========================================
-
-
-    public ComponentVariable(R result)
-    {
-        this.Default = result;
-        this.Result = result;
-    }
-
-
-    // ========================================
-    // 公開メソッド
+    // 窓口メソッド
     // ========================================
 
 

@@ -1,8 +1,9 @@
 ﻿@page "/property-changed-trigger-example"
-@using BlazorApp1.Components.Shared
-@using BlazorApp1.Models
 @implements IAsyncDisposable	// これでDisposeを有効化
 @rendermode InteractiveServer	// ボタンの @onclick に必要
+
+@using BlazorApp1.Components.Shared
+@using BlazorApp1.Infrastructure.ComponentParts
 @inject NavigationManager NavigationMgr
 
 <PageTitle>プロパティ変更トリガー</PageTitle>

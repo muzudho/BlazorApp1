@@ -1,15 +1,7 @@
-﻿namespace BlazorApp1.Models;
+﻿namespace BlazorApp1.Infrastructure.ComponentParts;
 
 public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 {
-
-
-    // ========================================
-    // プロパティ
-    // ========================================
-
-
-    public R Work { get; set; }
 
 
     // ========================================
@@ -24,7 +16,15 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
 
 
     // ========================================
-    // 公開メソッド
+    // 窓口プロパティ
+    // ========================================
+
+
+    public R Work { get; set; }
+
+
+    // ========================================
+    // 窓口メソッド
     // ========================================
 
 

@@ -1,7 +1,7 @@
-﻿namespace BlazorApp1.Src;
+﻿namespace BlazorApp1;
 
-using BlazorApp1.Src.Infrastructure.Configuration;
-using BlazorApp1.Src.Infrastructure.Logging;
+using BlazorApp1.Infrastructure.Configuration;
+using BlazorApp1.Infrastructure.Logging;
 
 /// <summary>
 /// どんなコンソール・アプリを作るときでも、本題に入る前に似たようなコードを書くことになる……、そんな似たコード［ホストビルド］をまとめたヘルパークラスだぜ（＾～＾）！

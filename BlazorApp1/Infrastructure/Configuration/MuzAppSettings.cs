@@ -1,4 +1,4 @@
-﻿namespace BlazorApp1.Src.Infrastructure.Configuration;
+﻿namespace BlazorApp1.Infrastructure.Configuration;
 
 /// <summary>
 ///     <pre>

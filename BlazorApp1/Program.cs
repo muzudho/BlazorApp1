@@ -1,7 +1,7 @@
+using BlazorApp1;
 using BlazorApp1.Components;
-using BlazorApp1.Src;
-using BlazorApp1.Src.Infrastructure.Configuration;
-using HelloConsoleAppCSharp.Src.Infrastructure.Logging;
+using BlazorApp1.Infrastructure.Configuration;
+using BlazorApp1.Infrastructure.Logging;
 using Microsoft.Extensions.Options;
 
 try

@@ -1,4 +1,4 @@
-﻿namespace HelloConsoleAppCSharp.Src.Infrastructure.Logging;
+﻿namespace BlazorApp1.Infrastructure.Logging;
 
 using Microsoft.Extensions.Logging;
 

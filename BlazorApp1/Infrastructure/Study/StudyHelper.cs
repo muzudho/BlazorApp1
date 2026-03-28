@@ -1,4 +1,4 @@
-﻿namespace BlazorApp1.Src.Infrastructure.Study;
+﻿namespace BlazorApp1.Infrastructure.Study;
 
 public static class StudyHelper
 {

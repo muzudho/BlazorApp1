@@ -1,6 +1,5 @@
-﻿namespace BlazorApp1.Src.Infrastructure.Logging;
+﻿namespace BlazorApp1.Infrastructure.Logging;
 
-using HelloConsoleAppCSharp.Src.Infrastructure.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -232,10 +232,10 @@
 		// アップル
 
 
-		this.AppleVar.ApplyChangedSource(
+		this.AppleVar.ReviewSourceChanges(
 			copySource: () => this.Apple,
 			convertToResult: (source) => source,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -254,10 +254,10 @@
 		// バナナ
 
 
-		this.BananaVar.ApplyChangedSource(
+		this.BananaVar.ReviewSourceChanges(
 			copySource: () => this.Banana,
 			convertToResult: (source) => source,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -276,10 +276,10 @@
 		// チェリー
 
 
-		this.CherryVar.ApplyChangedSource(
+		this.CherryVar.ReviewSourceChanges(
 			copySource: () => this.Cherry,
 			convertToResult: (source) => source,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -305,9 +305,9 @@
 		// アップル
 
 
-		this.AppleVar.ApplyChangedResult(
+		this.AppleVar.ReviewResultChanges(
 			copyResult: () => this.AppleVar.Result,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -329,9 +329,9 @@
 		// バナナ
 
 
-		this.BananaVar.ApplyChangedResult(
+		this.BananaVar.ReviewResultChanges(
 			copyResult: () => this.BananaVar.Result,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -353,9 +353,9 @@
 		// チェリー
 
 
-		this.CherryVar.ApplyChangedResult(
+		this.CherryVar.ReviewResultChanges(
 			copyResult: ()=> this.CherryVar.Result,
-			onProcessed: (oldValue, newValue) =>
+			onReport: (oldValue, newValue) =>
 			{
 				if (oldValue != newValue)
 				{
@@ -398,11 +398,11 @@
 	{
 		System.Console.WriteLine("[{DateTime.Now}][ＰropertyChangedExample.razor > ＳearchDammy]　🔥　検索ダミーボタン");
 
-		this.AppleVar.ApplyChangedWork(
+		this.AppleVar.ReviewWorkChanges(
 			copyWork: () => this.AppleVar.Work);
-		this.BananaVar.ApplyChangedWork(
+		this.BananaVar.ReviewWorkChanges(
 			copyWork: () => this.BananaVar.Work);
-		this.CherryVar.ApplyChangedWork(
+		this.CherryVar.ReviewWorkChanges(
 			copyWork: () => this.CherryVar.Work);
 	}
 

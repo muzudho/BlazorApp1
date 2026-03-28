@@ -50,7 +50,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="copyWork"></param>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
-    public void ApplyChangedWork(
+    public void ReviewWorkChanges(
         Func<R> copyWork,
         Action<R, R>? onChanged = null,
         Action? onUnchanged = null)
@@ -78,7 +78,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     /// <param name="copyWork"></param>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
-    public async Task ApplyChangedWork(
+    public async Task ReviewWorkChanges(
         Func<Task<R>> copyWork,
         Func<R, R, Task>? onChanged = null,
         Func<Task>? onUnchanged = null)

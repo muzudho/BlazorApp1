@@ -68,11 +68,11 @@ public class ComponentVariable<S, R>
     /// </summary>
     /// <param name="copySource"></param>
     /// <param name="convertToResult"></param>
-    /// <param name="onProcessed"></param>
-    public void ApplyChangedSource(
+    /// <param name="onReport"></param>
+    public void ReviewSourceChanges(
         Func<S> copySource,
         Func<S, R> convertToResult,
-        Action<S?, S>? onProcessed = null)
+        Action<S?, S>? onReport = null)
     {
         var oldValue = this._lastSource;
         var newValue = copySource();        // 値渡し
@@ -86,7 +86,7 @@ public class ComponentVariable<S, R>
                 convertToResult: convertToResult);
         }
 
-        onProcessed?.Invoke(oldValue, newValue);
+        onReport?.Invoke(oldValue, newValue);
     }
 
 
@@ -97,12 +97,12 @@ public class ComponentVariable<S, R>
     /// </summary>
     /// <param name="copySource"></param>
     /// <param name="convertToResult"></param>
-    /// <param name="onProcessed"></param>
+    /// <param name="onReport"></param>
     /// <param name="onUnchanged"></param>
-    public async Task ApplyChangedSource(
+    public async Task ReviewSourceChanges(
         Func<Task<S>> copySource,
         Func<S, Task<R>> convertToResult,
-        Func<S?, S, Task>? onProcessed = null)
+        Func<S?, S, Task>? onReport = null)
     {
         var oldValue = this._lastSource;
         var newValue = await copySource();      // 値渡し
@@ -116,9 +116,9 @@ public class ComponentVariable<S, R>
                 convertToResult: convertToResult);
         }
 
-        if (onProcessed != null)
+        if (onReport != null)
         {
-            await onProcessed(oldValue, newValue);
+            await onReport(oldValue, newValue);
         }
     }
 
@@ -148,10 +148,10 @@ public class ComponentVariable<S, R>
     ///     </pre>
     /// </summary>
     /// <param name="copyResult"></param>
-    /// <param name="onProcessed"></param>
-    public void ApplyChangedResult(
+    /// <param name="onReport"></param>
+    public void ReviewResultChanges(
         Func<R> copyResult,
-        Action<R, R>? onProcessed = null)
+        Action<R, R>? onReport = null)
     {
         var oldResult = this._lastResult;
         var newResult = copyResult();       // 値渡し
@@ -164,7 +164,7 @@ public class ComponentVariable<S, R>
                 copyResult: copyResult);
         }
 
-        onProcessed?.Invoke(oldResult, newResult);
+        onReport?.Invoke(oldResult, newResult);
     }
 
 
@@ -176,7 +176,7 @@ public class ComponentVariable<S, R>
     /// <param name="copyResult"></param>
     /// <param name="onChanged"></param>
     /// <param name="onUnchanged"></param>
-    public async Task ApplyChangedResult(
+    public async Task ReviewResultChanges(
         Func<Task<R>> copyResult,
         Func<R, R, Task>? onChanged = null,
         Func<Task>? onUnchanged = null)

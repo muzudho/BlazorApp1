@@ -1,0 +1,61 @@
+﻿@page "/life-cycle-custom-example"
+
+<h3>LifeCycleCustomExamplePage</h3>
+
+@code {
+
+
+    // ========================================
+    // ライフサイクルメソッド
+    // ========================================
+
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("OnInitialized");
+        base.OnInitialized();
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("OnInitializedAsync");
+        await base.OnInitializedAsync();
+        await Task.CompletedTask;
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine("OnParametersSet");
+        base.OnParametersSet();
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Console.WriteLine("OnParametersSetAsync");
+        await base.OnParametersSetAsync();
+        await Task.CompletedTask;
+    }
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"OnAfterRender: firstRender={firstRender}");
+        base.OnAfterRender(firstRender);
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine($"OnAfterRenderAsync: firstRender={firstRender}");
+        await base.OnAfterRenderAsync(firstRender);
+        await Task.CompletedTask;
+    }
+
+
+    // ========================================
+    // 内部データメンバー
+    // ========================================
+}

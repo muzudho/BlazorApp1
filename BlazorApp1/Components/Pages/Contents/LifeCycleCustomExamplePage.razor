@@ -55,6 +55,8 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // TODO: Re-entrance Guard 処理を入れたい。
+
         Console.WriteLine($"OnAfterRenderAsync: firstRender={firstRender}");
         await base.OnAfterRenderAsync(firstRender);
 
@@ -66,10 +68,7 @@
         }
 
         // パラメーターの変更に対する処理が終わっていない場合は、スキップします。
-        if (this._isParameterDirty)
-        {
-            return;
-        }
+        if (this._isParameterDirty) return;
 
         if (!this._isReady)
         {

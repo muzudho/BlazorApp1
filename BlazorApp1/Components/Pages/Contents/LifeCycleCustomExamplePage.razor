@@ -1,4 +1,5 @@
 ﻿@page "/life-cycle-custom-example"
+@using BlazorApp1.Infrastructure.ComponentParts
 
 <h3>LifeCycleCustomExamplePage</h3>
 
@@ -55,31 +56,45 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // TODO: Re-entrance Guard 処理を入れたい。
+        // Re-entrance Guard 処理。
+        await this.ReentranceGuardOnAfterRenderAsync.ScreeningAsync(
+            passedAsync: async () =>
+            {
+                await _OnAfterRenderAsync();
+            },
+            rejectAsync: async () =>
+            {
+                await this.InvokeAsync(this.StateHasChanged);
+            });
+        return;
 
-        Console.WriteLine($"OnAfterRenderAsync: firstRender={firstRender}");
-        await base.OnAfterRenderAsync(firstRender);
 
-        // 初回描画は、まだ `OnParametersSet()`, `OnParametersSetAsync()` が終わっていない可能性があるので、スキップします。
-        if (firstRender)
+        async Task _OnAfterRenderAsync()
         {
-            await this.InvokeAsync(this.StateHasChanged);
-            return;
+            Console.WriteLine($"OnAfterRenderAsync: firstRender={firstRender}");
+            await base.OnAfterRenderAsync(firstRender);
+
+            // 初回描画は、まだ `OnParametersSet()`, `OnParametersSetAsync()` が終わっていない可能性があるので、スキップします。
+            if (firstRender)
+            {
+                await this.InvokeAsync(this.StateHasChanged);
+                return;
+            }
+
+            // パラメーターの変更に対する処理が終わっていない場合は、スキップします。
+            if (this._isParameterDirty) return;
+
+            if (!this._isReady)
+            {
+                // １回だけ実行したい設定があれば、ここに書いてください。
+
+                this._isReady = true;
+            }
+
+            // ここに毎描画後の処理を書いてください。
+
+            await Task.CompletedTask;            
         }
-
-        // パラメーターの変更に対する処理が終わっていない場合は、スキップします。
-        if (this._isParameterDirty) return;
-
-        if (!this._isReady)
-        {
-            // １回だけ実行したい設定があれば、ここに書いてください。
-
-            this._isReady = true;
-        }
-
-        // ここに毎描画後の処理を書いてください。
-
-        await Task.CompletedTask;
     }
 
 
@@ -94,4 +109,6 @@
     private bool _isParameterDirty;
 
     private bool _isReady;
+
+    private MuzReentranceGuard ReentranceGuardOnAfterRenderAsync = new();
 }

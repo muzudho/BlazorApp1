@@ -29,6 +29,9 @@
     {
         Console.WriteLine("OnParametersSet");
         base.OnParametersSet();
+
+        // パラメーターに変更があったことを示すフラグを立てる
+        this._isParameterDirty = true;
     }
 
 
@@ -37,6 +40,9 @@
         Console.WriteLine("OnParametersSetAsync");
         await base.OnParametersSetAsync();
         await Task.CompletedTask;
+
+        // パラメーターの変更に対する処理が終わったらフラグを下す。
+        this._isParameterDirty = false;
     }
 
 
@@ -51,6 +57,29 @@
     {
         Console.WriteLine($"OnAfterRenderAsync: firstRender={firstRender}");
         await base.OnAfterRenderAsync(firstRender);
+
+        // 初回描画は、まだ `OnParametersSet()`, `OnParametersSetAsync()` が終わっていない可能性があるので、スキップします。
+        if (firstRender)
+        {
+            await this.InvokeAsync(this.StateHasChanged);
+            return;
+        }
+
+        // パラメーターの変更に対する処理が終わっていない場合は、スキップします。
+        if (this._isParameterDirty)
+        {
+            return;
+        }
+
+        if (!this._isReady)
+        {
+            // １回だけ実行したい設定があれば、ここに書いてください。
+
+            this._isReady = true;
+        }
+
+        // ここに毎描画後の処理を書いてください。
+
         await Task.CompletedTask;
     }
 
@@ -58,4 +87,12 @@
     // ========================================
     // 内部データメンバー
     // ========================================
+
+
+    /// <summary>
+    /// パラメーターに変更があり、それに対応する処理 `OnParametersSet()`, `OnParametersSetAsync()` がまだ終わっていないことを示すフラグです。
+    /// </summary>
+    private bool _isParameterDirty;
+
+    private bool _isReady;
 }

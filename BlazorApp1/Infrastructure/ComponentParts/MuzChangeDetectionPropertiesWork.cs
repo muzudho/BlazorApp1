@@ -1,6 +1,6 @@
 ﻿namespace BlazorApp1.Infrastructure.ComponentParts;
 
-public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
+public class MuzChangeDetectionPropertiesWork<S, R> : MuzChangeDetectionProperties<S, R>
 {
 
 
@@ -9,7 +9,7 @@ public class ComponentVariableWork<S, R> : ComponentVariable<S, R>
     // ========================================
 
 
-    public ComponentVariableWork(R result) : base(result)
+    public MuzChangeDetectionPropertiesWork(R result) : base(result)
     {
         this.Work = result;
     }

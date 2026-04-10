@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 
-public class ComponentVariable<S, R>
+public class MuzChangeDetectionProperties<S, R>
 {
 
 
@@ -11,7 +11,7 @@ public class ComponentVariable<S, R>
     // ========================================
 
 
-    public ComponentVariable(R result)
+    public MuzChangeDetectionProperties(R result)
     {
         this.Default = result;
         this.Result = result;

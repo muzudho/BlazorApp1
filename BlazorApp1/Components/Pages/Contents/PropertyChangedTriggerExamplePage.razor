@@ -120,7 +120,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Apple")]
 	public string? Apple { get; set; }                                  // ［クエリーパラメーター］がそのまま格納されます。
-	public ComponentVariableWork<string?, string?> AppleVar { get; set; } = new("Ringo");
+	public MuzChangeDetectionPropertiesWork<string?, string?> AppleVar { get; set; } = new("Ringo");
 
 
 	// バナナ
@@ -137,7 +137,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Banana")]
 	public string? Banana { get; set; }
-	public ComponentVariableWork<string?, string?> BananaVar { get; set; } = new("Basho");
+	public MuzChangeDetectionPropertiesWork<string?, string?> BananaVar { get; set; } = new("Basho");
 
 
 	// チェリー
@@ -152,7 +152,7 @@
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "Cherry")]
 	public string? Cherry { get; set; }
-	public ComponentVariableWork<string?, string?> CherryVar { get; set; } = new(default);
+	public MuzChangeDetectionPropertiesWork<string?, string?> CherryVar { get; set; } = new(default);
 
 
 	// ========================================

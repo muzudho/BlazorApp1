@@ -58,11 +58,11 @@
     {
         // Re-entrance Guard 処理。
         await this.ReentranceGuardOnAfterRenderAsync.ScreeningAsync(
-            passedAsync: async () =>
+            goAsync: async () =>
             {
                 await _OnAfterRenderAsync();
             },
-            rejectAsync: async () =>
+            followAsync: async () =>
             {
                 await this.InvokeAsync(this.StateHasChanged);
             });

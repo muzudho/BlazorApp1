@@ -51,15 +51,15 @@ internal class MuzReentranceGuard
 
 
     internal async Task ScreeningAsync(
-        Func<Task> passedAsync,
-        Func<Task> rejectAsync)
+        Func<Task> goAsync,
+        Func<Task> followAsync)
     {
         if (!this._inProgress)
         {
             this._inProgress = true;
             try
             {
-                await passedAsync();
+                await goAsync();
             }
             finally
             {
@@ -69,7 +69,7 @@ internal class MuzReentranceGuard
             if (this._isPending)
             {
                 this._isPending = false;
-                await rejectAsync();
+                await followAsync();
             }
         }
         else
